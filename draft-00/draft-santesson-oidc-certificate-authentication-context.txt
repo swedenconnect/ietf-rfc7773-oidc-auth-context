@@ -2,7 +2,7 @@
 
 
 
-LAMPS Working Group                                         S. Santesson
+Network Working Group                                       S. Santesson
 Internet-Draft                                              M. Lindstrom
 Updates: 7773 (if approved)                              IDsec Solutions
 Intended status: Standards Track                         19 October 2026
@@ -39,11 +39,6 @@ About This Document
    information for this document may be found at
    https://datatracker.ietf.org/doc/draft-santesson-oidc-certificate-
    authentication-context/.
-
-   Discussion of this document takes place on the LAMPS Working Group
-   mailing list (mailto:spasm@ietf.org), which is archived at
-   https://mailarchive.ietf.org/arch/browse/spasm/.  Subscribe at
-   https://www.ietf.org/mailman/listinfo/spasm/.
 
    Source for this draft and an issue tracker can be found at
    https://github.com/swedenconnect/ietf-rfc7773-oidc-auth-context.
