@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>OIDC Certificate Authentication Context</title>
+<title>OpenID Connect Certificate Authentication Context</title>
 <meta content="Stefan Santesson" name="author">
 <meta content="Martin Lindstrom" name="author">
 <meta content="
-       RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a SAML assertion. This document defines a second context information type for subjects authenticated by means of an OpenID Connect ID Token. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773. 
+       RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a Security Assertion Markup Language (SAML) assertion. This document defines a second context information type for subjects authenticated by means of an OpenID Connect ID Token. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773. 
        This document also updates RFC 7773 by clarifying that an application processing the extension ignores context information types it does not support regardless of the criticality of the extension, and by recommending that the extension not be marked critical. 
     " name="description">
 <meta content="xml2rfc 3.34.1" name="generator">
@@ -1085,10 +1085,10 @@ svg {
 </dd>
 </dl>
 </div>
-<h1 id="title">OIDC Certificate Authentication Context</h1>
+<h1 id="title">OpenID Connect Certificate Authentication Context</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a SAML assertion. This document defines a second context information type for subjects authenticated by means of an OpenID Connect ID Token. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a Security Assertion Markup Language (SAML) assertion. This document defines a second context information type for subjects authenticated by means of an OpenID Connect ID Token. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">This document also updates RFC 7773 by clarifying that an application processing the extension ignores context information types it does not support regardless of the criticality of the extension, and by recommending that the extension not be marked critical.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1262,8 +1262,8 @@ svg {
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">The Authentication Context certificate extension <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> allows a Certification Authority (CA) to record, in an issued certificate, information about the authentication event that preceded issuance. This is useful when the CA relies on an external identity provider to authenticate the subject, for example when certificates are issued on the fly to support electronic signatures, and relying parties need to understand the origin and assurance of the identity data placed in the certificate.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">The extension is a sequence of <code>AuthenticationContext</code> structures, each identified by a <code>contextType</code> URI that also determines the syntax of the accompanying <code>contextInfo</code> string. <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> defines one context type, SAML Authentication Context Information (SACI), for subjects authenticated by a SAML assertion, and explicitly provides for other documents to define additional context types.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">OpenID Connect <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span> has become a widely deployed alternative to SAML for federated authentication. An OpenID Connect authentication results in an ID Token, a JSON Web Token <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span> containing claims about the authentication event and the authenticated End-User. This document defines OpenID Connect Authentication Context Information (OACI), a context type whose <code>contextInfo</code> is a JSON object <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> carrying the information from an ID Token that is relevant to the issuance of a certificate.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-2">The extension is a sequence of <code>AuthenticationContext</code> structures, each identified by a <code>contextType</code> URI that also determines the syntax of the accompanying <code>contextInfo</code> string. <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> defines one context type, Security Assertion Markup Language (SAML) Authentication Context Information (SACI), for subjects authenticated by a SAML assertion, and explicitly provides for other documents to define additional context types.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">OpenID Connect <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span> has become a widely deployed alternative to SAML for federated authentication. An OpenID Connect authentication results in an ID Token, a JSON Web Token (JWT) <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span> containing claims about the authentication event and the authenticated End-User. This document defines OpenID Connect Authentication Context Information (OACI), a context type whose <code>contextInfo</code> is a JSON object <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> carrying the information from an ID Token that is relevant to the issuance of a certificate.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">OACI is deliberately structured as the OpenID Connect analogue of SACI. It records the issuer of the ID Token, the time of authentication, the authentication context class(es) asserted, a reference to the ID Token, the identity under which the CA acted as Relying Party, and a mapping from ID Token claims to the subject name attributes of the certificate that were derived from them.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">OACI is defined using the extensibility provided by Section 2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>. With a second context type in existence, the processing rule in <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> that ties the handling of unsupported context types to the criticality of the extension becomes an obstacle to interoperability: an application that implements only SACI would be required to reject a certificate carrying OACI in a critical extension, although the two convey the same kind of information. This document therefore also updates <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> as described in <a href="#updates-7773" class="auto internal xref">Section 4</a>.<a href="#section-1-5" class="pilcrow">¶</a></p>
 </section>
@@ -1579,7 +1579,7 @@ $defs:
             <p id="section-6.1-3.3.1">Reference: the specification defining the <code>contextInfo</code> syntax.<a href="#section-6.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.1-4">Context type URIs are not required to be assigned under the URN sub-namespace registered in <a href="#iana-urn" class="auto internal xref">Section 6.2</a>; any URI under the control of the registrant is acceptable. Registrations under the URN sub-namespace are expected to be made by IETF documents.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">Context type URIs are not required to be assigned under the Uniform Resource Name (URN) sub-namespace registered in <a href="#iana-urn" class="auto internal xref">Section 6.2</a>; any URI under the control of the registrant is acceptable. Registrations under the URN sub-namespace are expected to be made by IETF documents.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
 <p id="section-6.1-5">The initial content of the registry is:<a href="#section-6.1-5" class="pilcrow">¶</a></p>
 <span id="name-initial-registry-content"></span><table class="center" id="table-1">
           <caption>
@@ -1733,7 +1733,7 @@ $defs:
         <h3 id="name-example-oaci-object">
 <a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-example-oaci-object" class="section-name selfRef">Example OACI Object</a>
         </h3>
-<p id="appendix-A.1-1">The following OACI object records an authentication performed by the OpenID Provider <code>https://op.example.com</code> at a context class defined by an example trust framework. The certificate subject name contains the End-User's given name (OID 2.5.4.42), surname (OID 2.5.4.4) and serial number (OID 2.5.4.5), and an email address in the Subject Alternative Name extension, all derived from ID Token claims.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-1">The following OACI object records an authentication performed by the OpenID Provider <code>https://op.example.com</code> at a context class defined by an example trust framework. The certificate subject name contains the End-User's given name (object identifier (OID) 2.5.4.42), surname (OID 2.5.4.4) and serial number (OID 2.5.4.5), and an email address in the Subject Alternative Name extension, all derived from ID Token claims.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
 <div class="lang-json sourcecode" id="appendix-A.1-2">
 <pre>
 {
@@ -1762,7 +1762,7 @@ $defs:
         <h3 id="name-example-extension">
 <a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-example-extension" class="section-name selfRef">Example Extension</a>
         </h3>
-<p id="appendix-A.2-1">The <code>AuthenticationContext</code> carrying the above object has <code>contextType</code> set to <code>urn:ietf:params:x509-auth-context:oidc</code> and <code>contextInfo</code> set to the compact serialization of the object. A DER rendering of the complete extension will be added in a future revision.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-1">The <code>AuthenticationContext</code> carrying the above object has <code>contextType</code> set to <code>urn:ietf:params:x509-auth-context:oidc</code> and <code>contextInfo</code> set to the compact serialization of the object. A Distinguished Encoding Rules (DER) rendering of the complete extension will be added in a future revision.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
