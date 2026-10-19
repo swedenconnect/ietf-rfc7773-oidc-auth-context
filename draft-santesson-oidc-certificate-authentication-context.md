@@ -11,18 +11,18 @@ number:
 date:
 consensus: true
 v: 3
-area: "Security"
-workgroup: "LAMPS Working Group"
+# area: "Security"
+# workgroup: "LAMPS Working Group"
 keyword:
  - certificate
  - oidc
  - authentication
  - X.509
 venue:
-  group: "LAMPS"
-  type: "Working Group"
-  mail: "spasm@ietf.org"
-  arch: "https://mailarchive.ietf.org/arch/browse/spasm/"
+#  group: "LAMPS"
+#  type: "Working Group"
+#  mail: "spasm@ietf.org"
+#  arch: "https://mailarchive.ietf.org/arch/browse/spasm/"
   github: "swedenconnect/ietf-rfc7773-oidc-auth-context"
   latest: "https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/draft-santesson-oidc-certificate-authentication-context.html"
 
@@ -158,7 +158,7 @@ the ASN.1 components defined in Section 2 of {{RFC7773}}.
 ## Context Type Identifier {#context-type}
 
 An `AuthenticationContext` carrying OpenID Connect Authentication Context
-Information in accordance with this specification MUST have a `contextType` 
+Information in accordance with this specification MUST have a `contextType`
 with the following URI value:
 
 ~~~
