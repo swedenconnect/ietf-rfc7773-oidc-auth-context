@@ -1,0 +1,3 @@
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-santesson-oidc-certificate-authentication-context.md sts@aaa-sec.com martin@litsec.se
