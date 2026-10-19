@@ -1,5 +1,5 @@
 ---
-title: "OIDC Certificate Authentication Context"
+title: "OpenID Connect Certificate Authentication Context"
 abbrev: "OIDC Cert Auth Context"
 ipr: trust200902
 category: std
@@ -84,7 +84,7 @@ informative:
 
 --- abstract
 
-RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a SAML assertion. This document defines a second context information type for subjects authenticated by means of an OpenID Connect ID Token. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773.
+RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a Security Assertion Markup Language (SAML) assertion. This document defines a second context information type for subjects authenticated by means of an OpenID Connect ID Token. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773.
 
 This document also updates RFC 7773 by clarifying that an application processing the extension ignores context information types it does not support regardless of the criticality of the extension, and by recommending that the extension not be marked critical.
 
@@ -94,9 +94,9 @@ This document also updates RFC 7773 by clarifying that an application processing
 
 The Authentication Context certificate extension {{RFC7773}} allows a Certification Authority (CA) to record, in an issued certificate, information about the authentication event that preceded issuance. This is useful when the CA relies on an external identity provider to authenticate the subject, for example when certificates are issued on the fly to support electronic signatures, and relying parties need to understand the origin and assurance of the identity data placed in the certificate.
 
-The extension is a sequence of `AuthenticationContext` structures, each identified by a `contextType` URI that also determines the syntax of the accompanying `contextInfo` string. {{RFC7773}} defines one context type, SAML Authentication Context Information (SACI), for subjects authenticated by a SAML assertion, and explicitly provides for other documents to define additional context types.
+The extension is a sequence of `AuthenticationContext` structures, each identified by a `contextType` URI that also determines the syntax of the accompanying `contextInfo` string. {{RFC7773}} defines one context type, Security Assertion Markup Language (SAML) Authentication Context Information (SACI), for subjects authenticated by a SAML assertion, and explicitly provides for other documents to define additional context types.
 
-OpenID Connect {{OIDC.Core}} has become a widely deployed alternative to SAML for federated authentication. An OpenID Connect authentication results in an ID Token, a JSON Web Token {{RFC7519}} containing claims about the authentication event and the authenticated End-User. This document defines OpenID Connect Authentication Context Information (OACI), a context type whose `contextInfo` is a JSON object {{RFC8259}} carrying the information from an ID Token that is relevant to the issuance of a certificate.
+OpenID Connect {{OIDC.Core}} has become a widely deployed alternative to SAML for federated authentication. An OpenID Connect authentication results in an ID Token, a JSON Web Token (JWT) {{RFC7519}} containing claims about the authentication event and the authenticated End-User. This document defines OpenID Connect Authentication Context Information (OACI), a context type whose `contextInfo` is a JSON object {{RFC8259}} carrying the information from an ID Token that is relevant to the issuance of a certificate.
 
 OACI is deliberately structured as the OpenID Connect analogue of SACI. It records the issuer of the ID Token, the time of authentication, the authentication context class(es) asserted, a reference to the ID Token, the identity under which the CA acted as Relying Party, and a mapping from ID Token claims to the subject name attributes of the certificate that were derived from them.
 
@@ -306,7 +306,7 @@ The registration policy is Specification Required (see {{!RFC8126}}). Each entry
 * Description: a short description of the context information type.
 * Reference: the specification defining the `contextInfo` syntax.
 
-Context type URIs are not required to be assigned under the URN sub-namespace registered in {{iana-urn}}; any URI under the control of the registrant is acceptable. Registrations under the URN sub-namespace are expected to be made by IETF documents.
+Context type URIs are not required to be assigned under the Uniform Resource Name (URN) sub-namespace registered in {{iana-urn}}; any URI under the control of the registrant is acceptable. Registrations under the URN sub-namespace are expected to be made by IETF documents.
 
 The initial content of the registry is:
 
@@ -338,7 +338,7 @@ Index value:
 
 ## Example OACI Object
 
-The following OACI object records an authentication performed by the OpenID Provider `https://op.example.com` at a context class defined by an example trust framework. The certificate subject name contains the End-User's given name (OID 2.5.4.42), surname (OID 2.5.4.4) and serial number (OID 2.5.4.5), and an email address in the Subject Alternative Name extension, all derived from ID Token claims.
+The following OACI object records an authentication performed by the OpenID Provider `https://op.example.com` at a context class defined by an example trust framework. The certificate subject name contains the End-User's given name (object identifier (OID) 2.5.4.42), surname (OID 2.5.4.4) and serial number (OID 2.5.4.5), and an email address in the Subject Alternative Name extension, all derived from ID Token claims.
 
 ~~~ json
 {
@@ -364,7 +364,7 @@ Note that the third mapping refers to a claim whose name is itself a URI. Since 
 
 ## Example Extension
 
-The `AuthenticationContext` carrying the above object has `contextType` set to `urn:ietf:params:x509-auth-context:oidc` and `contextInfo` set to the compact serialization of the object. A DER rendering of the complete extension will be added in a future revision.
+The `AuthenticationContext` carrying the above object has `contextType` set to `urn:ietf:params:x509-auth-context:oidc` and `contextInfo` set to the compact serialization of the object. A Distinguished Encoding Rules (DER) rendering of the complete extension will be added in a future revision.
 
 # Design Notes
 {:numbered="false"}
