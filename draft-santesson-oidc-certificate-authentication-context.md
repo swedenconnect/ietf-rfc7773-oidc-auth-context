@@ -11,18 +11,18 @@ number:
 date:
 consensus: true
 v: 3
-area: "Security"
-workgroup: "LAMPS Working Group"
+# area: "Security"
+# workgroup: "LAMPS Working Group"
 keyword:
  - certificate
  - oidc
  - authentication
  - X.509
 venue:
-  group: "LAMPS"
-  type: "Working Group"
-  mail: "spasm@ietf.org"
-  arch: "https://mailarchive.ietf.org/arch/browse/spasm/"
+#  group: "LAMPS"
+#  type: "Working Group"
+#  mail: "spasm@ietf.org"
+#  arch: "https://mailarchive.ietf.org/arch/browse/spasm/"
   github: "swedenconnect/ietf-rfc7773-oidc-auth-context"
   latest: "https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/draft-santesson-oidc-certificate-authentication-context.html"
 
