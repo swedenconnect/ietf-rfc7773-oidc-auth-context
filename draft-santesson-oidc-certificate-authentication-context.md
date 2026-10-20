@@ -84,7 +84,7 @@ informative:
 
 --- abstract
 
-RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a Security Assertion Markup Language (SAML) assertion. This document defines a second context information type for subjects authenticated by means of an OpenID Connect ID Token. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773.
+RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a Security Assertion Markup Language (SAML) assertion. This document defines a second context information type for subjects authenticated by means of OpenID Connect, where the identity information is obtained from an ID Token, where applicable in combination with a UserInfo Response. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773.
 
 This document also updates RFC 7773 by clarifying that an application processing the extension ignores context information types it does not support regardless of the criticality of the extension, and by recommending that the extension not be marked critical.
 
@@ -96,7 +96,7 @@ The Authentication Context certificate extension {{RFC7773}} allows a Certificat
 
 The extension is a sequence of `AuthenticationContext` structures, each identified by a `contextType` URI that also determines the syntax of the accompanying `contextInfo` string. {{RFC7773}} defines one context type, Security Assertion Markup Language (SAML) Authentication Context Information (SACI), for subjects authenticated by a SAML assertion, and explicitly provides for other documents to define additional context types.
 
-OpenID Connect {{OIDC.Core}} has become a widely deployed alternative to SAML for federated authentication. An OpenID Connect authentication results in an ID Token, a JSON Web Token (JWT) {{RFC7519}} containing claims about the authentication event and the authenticated End-User. This document defines OpenID Connect Authentication Context Information (OACI), a context type whose `contextInfo` is a JSON object {{RFC8259}} carrying the information from an ID Token that is relevant to the issuance of a certificate.
+OpenID Connect {{OIDC.Core}} has become a widely deployed alternative to SAML for federated authentication. An OpenID Connect authentication results in an ID Token, a JSON Web Token (JWT) {{RFC7519}} containing claims about the authentication event and the authenticated End-User. Further claims about the End-User may be obtained from the UserInfo Endpoint of the OpenID Provider. This document defines OpenID Connect Authentication Context Information (OACI), a context type whose `contextInfo` is a JSON object {{RFC8259}} carrying the information from the ID Token and, where applicable, the UserInfo Response that is relevant to the issuance of a certificate.
 
 OACI is deliberately structured as the OpenID Connect analogue of SACI. It records the issuer of the ID Token, the time of authentication, the authentication context class(es) asserted, a reference to the ID Token, the identity under which the CA acted as Relying Party, and a mapping from ID Token claims to the subject name attributes of the certificate that were derived from them.
 
@@ -106,7 +106,9 @@ OACI is defined using the extensibility provided by Section 2 of {{RFC7773}}. Wi
 
 {::boilerplate bcp14-tagged}
 
-This document uses the terms OpenID Provider (OP), Relying Party (RP), End-User, ID Token and Claim as defined in {{OIDC.Core}}. The CA that issues the certificate is the RP of the OpenID Connect authentication.
+This document uses the terms OpenID Provider (OP), Relying Party (RP), End-User, ID Token, Claim, UserInfo Endpoint and UserInfo Response as defined in {{OIDC.Core}}.
+
+The RP of the OpenID Connect authentication is either the CA that issues the certificate or a Registration Authority (RA) acting on behalf of the CA, such as a signing service that authenticates the End-User and then requests a certificate from the CA, conveying the authentication information with the request. For brevity, this document refers to the CA as the RP; where an RA performs the authentication, statements about the CA's handling of the ID Token and UserInfo Response apply to the RA, and the CA is responsible for the information under its certificate policy and practices.
 
 The terms `contextType`, `contextInfo` and `AuthenticationContext` refer to the ASN.1 components defined in Section 2 of {{RFC7773}}.
 
@@ -153,7 +155,7 @@ client_id:
 : String. The OAuth 2.0 client identifier under which the CA acted as Relying Party towards the OpenID Provider. This value appears as an audience of the ID Token (the `aud` claim) and, where present, as the `azp` claim. This member corresponds to the `ServiceID` attribute of SACI.
 
 claim_mappings:
-: Array of objects. Each object describes how one claim about the End-User, obtained from the ID Token or from the UserInfo endpoint of the OP, was used to populate a subject name attribute in the certificate. The structure of each object is defined in {{claim-mapping}}. This member corresponds to the `IdAttributes` element of SACI. The array MUST contain at least one element when present.
+: Array of objects. Each object describes how one claim about the End-User, obtained from the ID Token or from the UserInfo Response, was used to populate a subject name attribute in the certificate. The structure of each object is defined in {{claim-mapping}}. This member corresponds to the `IdAttributes` element of SACI. The array MUST contain at least one element when present.
 
 ## Claim Mapping {#claim-mapping}
 
@@ -178,10 +180,10 @@ ref:
   * For type `san`, the decimal tag number of the `GeneralName` choice, e.g. `1` for `rfc822Name` and `2` for `dNSName`. For the `otherName` choice, the object identifier of the `type-id` in dotted-decimal notation.
 
 claim:
-: REQUIRED. String. A JSON Pointer {{RFC6901}} identifying the claim within the set of claims about the End-User, where the root of the pointer is the ID Token claims set (or the UserInfo response object, see `source`). For a standard top-level claim this is simply `/` followed by the claim name, e.g. `/given_name`. The pointer form allows reference to members of structured claims, e.g. `/address/street_address`, and to claims in aggregated or distributed claim sets.
+: REQUIRED. String. A JSON Pointer {{RFC6901}} identifying the claim within the set of claims about the End-User, where the root of the pointer is the ID Token claims set (or the UserInfo Response, see `source`). For a standard top-level claim this is simply `/` followed by the claim name, e.g. `/given_name`. The pointer form allows reference to members of structured claims, e.g. `/address/street_address`, and to claims in aggregated or distributed claim sets.
 
 source:
-: String. Indicates where the claim was obtained. The value `id_token` indicates the ID Token; the value `userinfo` indicates the UserInfo endpoint response. When absent, the default value is `id_token`.
+: String. Indicates where the claim was obtained. The value `id_token` indicates the ID Token; the value `userinfo` indicates the UserInfo Response. When absent, the default value is `id_token`.
 
 A single certificate attribute MAY be derived from more than one claim, in which case several claim mapping objects share the same `type` and `ref` values. A single claim MAY be mapped to more than one certificate attribute.
 
@@ -244,9 +246,9 @@ $defs:
 
 Unrecognized members are permitted everywhere; the schema intentionally does not set `additionalProperties` to `false`.
 
-## Relationship to the ID Token {#relationship}
+## Relationship to the ID Token and UserInfo Response {#relationship}
 
-The OACI object is produced by the CA from an ID Token (and optionally a UserInfo response) that the CA has validated according to Section 3.1.3.7 of {{OIDC.Core}}. The OACI object is not itself a token: it carries no signature and no `exp` or `iat` members, because its integrity and lifetime are those of the certificate in which it is embedded. A relying party that wishes to inspect the original ID Token may use the `iss`, `client_id` and `jti` members to locate it, if the CA retains tokens according to its practices.
+The OACI object is produced by the CA from an ID Token, and where applicable a UserInfo Response, that the CA has validated according to Sections 3.1.3.7 and 5.3.4 of {{OIDC.Core}}. The OACI object is not itself a token: it carries no signature and no `exp` or `iat` members, because its integrity and lifetime are those of the certificate in which it is embedded. A relying party that wishes to inspect the original ID Token may use the `iss`, `client_id` and `jti` members to locate it, if the CA retains tokens according to its practices.
 
 # Updates to RFC 7773 {#updates-7773}
 
@@ -274,7 +276,7 @@ The security considerations of {{RFC7773}} apply.
 
 ## Trust in the Recorded Information
 
-The information in an OACI object is asserted by the CA, not by the OpenID Provider. The CA copies values from an ID Token that it validated at the time of issuance; a relying party has no means of re-validating the ID Token from the certificate alone. A relying party therefore trusts the OACI content to exactly the extent that it trusts the CA, as expressed in the CA's certificate policy and practices.
+The information in an OACI object is asserted by the CA, not by the OpenID Provider. The CA, or an RA acting on its behalf, copies values from an ID Token and UserInfo Response that it validated at the time of issuance; a relying party has no means of re-validating these from the certificate alone. A relying party therefore trusts the OACI content to exactly the extent that it trusts the CA, as expressed in the CA's certificate policy and practices. Where an RA performs the authentication, the CA's trust in the RA, and the means by which the authentication information is conveyed from the RA to the CA, are matters for the CA's practices and are outside the scope of this document.
 
 ## Authentication Context Class References
 
