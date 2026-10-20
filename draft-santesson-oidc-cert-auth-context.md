@@ -5,7 +5,7 @@ ipr: trust200902
 category: std
 updates: 7773
 
-docname: draft-santesson-oidc-certificate-authentication-context-latest
+docname: draft-santesson-oidc-cert-auth-context-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date: 2026-10-20
