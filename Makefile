@@ -13,3 +13,5 @@ else
 	    https://github.com/martinthomson/i-d-template $(LIBDIR)
 endif
 endif
+
+export UPLOAD_EMAIL ?= sts@aaa-sec.com
