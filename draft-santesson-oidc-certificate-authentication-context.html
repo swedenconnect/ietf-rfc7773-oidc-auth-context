@@ -4,23 +4,12 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>OIDC Certificate Authentication Context</title>
+<title>Certificate Authentication Context Type for OpenID Connect</title>
 <meta content="Stefan Santesson" name="author">
 <meta content="Martin Lindstrom" name="author">
 <meta content="
-       RFC 7773 defines the Authentication Context certificate extension, which
-carries information about how the subject of an X.509 certificate was
-authenticated when the certificate was issued. RFC 7773 defines one
-context information type, for subjects authenticated by means of a SAML
-assertion. This document defines a second context information type for
-subjects authenticated by means of an OpenID Connect ID Token. The
-information is expressed as a JSON object and provides the OpenID Connect
-counterpart to the SAML Authentication Context Information defined in
-RFC 7773. 
-       This document also updates RFC 7773 by clarifying that an application
-processing the extension ignores context information types it does not
-support regardless of the criticality of the extension, and by recommending
-that the extension not be marked critical. 
+       RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a Security Assertion Markup Language (SAML) assertion. This document defines a second context information type for subjects authenticated by means of OpenID Connect, where the identity information is obtained from an ID Token, where applicable in combination with a UserInfo Response. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773. 
+       This document also updates RFC 7773 by clarifying that an application processing the extension ignores context information types it does not support regardless of the criticality of the extension, and by recommending that the extension not be marked critical. 
     " name="description">
 <meta content="xml2rfc 3.34.1" name="generator">
 <meta content="certificate" name="keyword">
@@ -1061,7 +1050,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Santesson &amp; Lindstrom</td>
-<td class="center">Expires 22 April 2027</td>
+<td class="center">Expires 23 April 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,7 +1058,7 @@ svg {
 <div id="internal-metadata" class="document-information">
 <dl id="identifiers">
 <dt class="label-workgroup">Workgroup:</dt>
-<dd class="workgroup">LAMPS Working Group</dd>
+<dd class="workgroup">Network Working Group</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
 <dd class="internet-draft">draft-santesson-oidc-certificate-authentication-context-latest</dd>
 <dt class="label-updates">Updates:</dt>
@@ -1077,12 +1066,12 @@ svg {
 <a href="https://www.rfc-editor.org/rfc/rfc7773" class="eref">7773</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-10-19" class="published">19 October 2026</time>
+<time datetime="2026-10-20" class="published">20 October 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-04-22">22 April 2027</time></dd>
+<dd class="expires"><time datetime="2027-04-23">23 April 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1096,22 +1085,11 @@ svg {
 </dd>
 </dl>
 </div>
-<h1 id="title">OIDC Certificate Authentication Context</h1>
+<h1 id="title">Certificate Authentication Context Type for OpenID Connect</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">RFC 7773 defines the Authentication Context certificate extension, which
-carries information about how the subject of an X.509 certificate was
-authenticated when the certificate was issued. RFC 7773 defines one
-context information type, for subjects authenticated by means of a SAML
-assertion. This document defines a second context information type for
-subjects authenticated by means of an OpenID Connect ID Token. The
-information is expressed as a JSON object and provides the OpenID Connect
-counterpart to the SAML Authentication Context Information defined in
-RFC 7773.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This document also updates RFC 7773 by clarifying that an application
-processing the extension ignores context information types it does not
-support regardless of the criticality of the extension, and by recommending
-that the extension not be marked critical.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">RFC 7773 defines the Authentication Context certificate extension, which carries information about how the subject of an X.509 certificate was authenticated when the certificate was issued. RFC 7773 defines one context information type, for subjects authenticated by means of a Security Assertion Markup Language (SAML) assertion. This document defines a second context information type for subjects authenticated by means of OpenID Connect, where the identity information is obtained from an ID Token, where applicable in combination with a UserInfo Response. The information is expressed as a JSON object and provides the OpenID Connect counterpart to the SAML Authentication Context Information defined in RFC 7773.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document also updates RFC 7773 by clarifying that an application processing the extension ignores context information types it does not support regardless of the criticality of the extension, and by recommending that the extension not be marked critical.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1121,13 +1099,8 @@ that the extension not be marked critical.<a href="#section-abstract-2" class="p
 <p id="section-note.1-2">
         The latest revision of this draft can be found at <span><a href="https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/draft-santesson-oidc-certificate-authentication-context.html">https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/draft-santesson-oidc-certificate-authentication-context.html</a></span>.
         Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-santesson-oidc-certificate-authentication-context/">https://datatracker.ietf.org/doc/draft-santesson-oidc-certificate-authentication-context/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
-<p id="section-note.1-3">
-        Discussion of this document takes place on the
-        LAMPS Working Group mailing list (<span><a href="mailto:spasm@ietf.org">mailto:spasm@ietf.org</a></span>),
-        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/spasm/">https://mailarchive.ietf.org/arch/browse/spasm/</a></span>.
-        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/spasm/">https://www.ietf.org/mailman/listinfo/spasm/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
-<p id="section-note.1-4">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/swedenconnect/ietf-rfc7773-oidc-auth-context">https://github.com/swedenconnect/ietf-rfc7773-oidc-auth-context</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/swedenconnect/ietf-rfc7773-oidc-auth-context">https://github.com/swedenconnect/ietf-rfc7773-oidc-auth-context</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1148,7 +1121,7 @@ that the extension not be marked critical.<a href="#section-abstract-2" class="p
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1202,7 +1175,7 @@ that the extension not be marked critical.<a href="#section-abstract-2" class="p
                 <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-schema" class="internal xref">Schema</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6">
-                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="auto internal xref">3.6</a>.  <a href="#name-relationship-to-the-id-toke" class="internal xref">Relationship to the ID Token</a></p>
+                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="auto internal xref">3.6</a>.  <a href="#name-relationship-to-the-id-toke" class="internal xref">Relationship to the ID Token and UserInfo Response</a></p>
 </li>
             </ul>
 </li>
@@ -1288,40 +1261,11 @@ that the extension not be marked critical.<a href="#section-abstract-2" class="p
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The Authentication Context certificate extension <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> allows a
-Certification Authority (CA) to record, in an issued certificate,
-information about the authentication event that preceded issuance. This is
-useful when the CA relies on an external identity provider to authenticate
-the subject, for example when certificates are issued on the fly to support
-electronic signatures, and relying parties need to understand the origin and
-assurance of the identity data placed in the certificate.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">The extension is a sequence of <code>AuthenticationContext</code> structures, each
-identified by a <code>contextType</code> URI that also determines the syntax of the
-accompanying <code>contextInfo</code> string. <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> defines one context type,
-SAML Authentication Context Information (SACI), for subjects authenticated
-by a SAML assertion, and explicitly provides for other documents to define
-additional context types.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">OpenID Connect <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span> has become a widely deployed alternative to
-SAML for federated authentication. An OpenID Connect authentication results
-in an ID Token, a JSON Web Token <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span> containing claims about the
-authentication event and the authenticated End-User. This document defines
-OpenID Connect Authentication Context Information (OACI), a context type
-whose <code>contextInfo</code> is a JSON object <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> carrying the information
-from an ID Token that is relevant to the issuance of a certificate.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">OACI is deliberately structured as the OpenID Connect analogue of SACI. It
-records the issuer of the ID Token, the time of authentication, the
-authentication context class(es) asserted, a reference to the ID Token, the
-identity under which the CA acted as Relying Party, and a mapping from
-ID Token claims to the subject name attributes of the certificate that were
-derived from them.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">OACI is defined using the extensibility provided by Section 2 of
-<span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>. With a second context type in existence, the processing rule
-in <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> that ties the handling of unsupported context types to the
-criticality of the extension becomes an obstacle to interoperability: an
-application that implements only SACI would be required to reject a
-certificate carrying OACI in a critical extension, although the two convey
-the same kind of information. This document therefore also updates
-<span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> as described in <a href="#updates-7773" class="auto internal xref">Section 4</a>.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-1">The Authentication Context certificate extension <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> allows a Certification Authority (CA) to record, in an issued certificate, information about the authentication event that preceded issuance. This is useful when the CA relies on an external identity provider to authenticate the subject, for example when certificates are issued on the fly to support electronic signatures, and relying parties need to understand the origin and assurance of the identity data placed in the certificate.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The extension is a sequence of <code>AuthenticationContext</code> structures, each identified by a <code>contextType</code> URI that also determines the syntax of the accompanying <code>contextInfo</code> string. <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> defines one context type, Security Assertion Markup Language (SAML) Authentication Context Information (SACI), for subjects authenticated by a SAML assertion, and explicitly provides for other documents to define additional context types.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">OpenID Connect <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span> has become a widely deployed alternative to SAML for federated authentication. An OpenID Connect authentication results in an ID Token, a JSON Web Token (JWT) <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span> containing claims about the authentication event and the authenticated End-User. Further claims about the End-User may be obtained from the UserInfo Endpoint of the OpenID Provider. This document defines OpenID Connect Authentication Context Information (OACI), a context type whose <code>contextInfo</code> is a JSON object <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> carrying the information from the ID Token and, where applicable, the UserInfo Response that is relevant to the issuance of a certificate.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">OACI is deliberately structured as the OpenID Connect analogue of SACI. It records the issuer of the ID Token, the time of authentication, the authentication context class(es) asserted, a reference to the ID Token, the identity under which the CA acted as Relying Party, and a mapping from ID Token claims to the subject name attributes of the certificate that were derived from them.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">OACI is defined using the extensibility provided by Section 2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>. With a second context type in existence, the processing rule in <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> that ties the handling of unsupported context types to the criticality of the extension becomes an obstacle to interoperability: an application that implements only SACI would be required to reject a certificate carrying OACI in a critical extension, although the two convey the same kind of information. This document therefore also updates <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> as described in <a href="#updates-7773" class="auto internal xref">Section 4</a>.<a href="#section-1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1333,11 +1277,9 @@ the same kind of information. This document therefore also updates
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">This document uses the terms OpenID Provider (OP), Relying Party (RP),
-End-User, ID Token and Claim as defined in <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>. The CA that issues
-the certificate is the RP of the OpenID Connect authentication.<a href="#section-2-2" class="pilcrow">¶</a></p>
-<p id="section-2-3">The terms <code>contextType</code>, <code>contextInfo</code> and <code>AuthenticationContext</code> refer to
-the ASN.1 components defined in Section 2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-2">This document uses the terms OpenID Provider (OP), Relying Party (RP), End-User, ID Token, Claim, UserInfo Endpoint and UserInfo Response as defined in <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">The RP of the OpenID Connect authentication is either the CA that issues the certificate or a Registration Authority (RA) acting on behalf of the CA, such as a signing service that authenticates the End-User and then requests a certificate from the CA, conveying the authentication information with the request. For brevity, this document refers to the CA as the RP; where an RA performs the authentication, statements about the CA's handling of the ID Token and UserInfo Response apply to the RA, and the CA is responsible for the information under its certificate policy and practices.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">The terms <code>contextType</code>, <code>contextInfo</code> and <code>AuthenticationContext</code> refer to the ASN.1 components defined in Section 2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>.<a href="#section-2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="oaci">
@@ -1350,16 +1292,13 @@ the ASN.1 components defined in Section 2 of <span>[<a href="#RFC7773" class="ci
         <h3 id="name-context-type-identifier">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-context-type-identifier" class="section-name selfRef">Context Type Identifier</a>
         </h3>
-<p id="section-3.1-1">An <code>AuthenticationContext</code> carrying OpenID Connect Authentication Context
-Information in accordance with this specification <span class="bcp14">MUST</span> have a <code>contextType</code> 
-with the following URI value:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">An <code>AuthenticationContext</code> carrying OpenID Connect Authentication Context Information in accordance with this specification <span class="bcp14">MUST</span> have a <code>contextType</code> with the following URI value:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.1-2">
 <pre>
 urn:ietf:params:x509-auth-context:oidc
 </pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1-3">The <code>contextInfo</code> component of such an <code>AuthenticationContext</code> <span class="bcp14">MUST</span> be
-present and <span class="bcp14">MUST</span> contain a JSON object as specified in <a href="#json-structure" class="auto internal xref">Section 3.3</a>.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">The <code>contextInfo</code> component of such an <code>AuthenticationContext</code> <span class="bcp14">MUST</span> be present and <span class="bcp14">MUST</span> contain a JSON object as specified in <a href="#json-structure" class="auto internal xref">Section 3.3</a>.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="encoding">
@@ -1367,18 +1306,9 @@ present and <span class="bcp14">MUST</span> contain a JSON object as specified i
         <h3 id="name-encoding">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-encoding" class="section-name selfRef">Encoding</a>
         </h3>
-<p id="section-3.2-1">The <code>contextInfo</code> value is a <code>UTF8String</code> <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>. Its content <span class="bcp14">MUST</span> be
-a single JSON text <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> whose top-level value is an object. The JSON
-text <span class="bcp14">MUST</span> conform to the I-JSON message format <span>[<a href="#RFC7493" class="cite xref">RFC7493</a>]</span>. In particular,
-it <span class="bcp14">MUST</span> be encoded in UTF-8, <span class="bcp14">MUST NOT</span> begin with a byte order mark, and
-<span class="bcp14">MUST NOT</span> contain duplicate member names.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">Producers <span class="bcp14">SHOULD</span> serialize the object without insignificant whitespace in
-order to limit certificate size. Consumers <span class="bcp14">MUST</span> accept any serialization
-that is valid I-JSON.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">Consumers <span class="bcp14">MUST</span> ignore members of the top-level object, and of the objects in
-the <code>claim_mappings</code> array, that they do not recognize. This allows future
-documents and deployment profiles to add members without breaking existing
-implementations.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">The <code>contextInfo</code> value is a <code>UTF8String</code> <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>. Its content <span class="bcp14">MUST</span> be a single JSON text <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> whose top-level value is an object. The JSON text <span class="bcp14">MUST</span> conform to the I-JSON message format <span>[<a href="#RFC7493" class="cite xref">RFC7493</a>]</span>. In particular, it <span class="bcp14">MUST</span> be encoded in UTF-8, <span class="bcp14">MUST NOT</span> begin with a byte order mark, and <span class="bcp14">MUST NOT</span> contain duplicate member names.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">Producers <span class="bcp14">SHOULD</span> serialize the object without insignificant whitespace in order to limit certificate size. Consumers <span class="bcp14">MUST</span> accept any serialization that is valid I-JSON.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">Consumers <span class="bcp14">MUST</span> ignore members of the top-level object, and of the objects in the <code>claim_mappings</code> array, that they do not recognize. This allows future documents and deployment profiles to add members without breaking existing implementations.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="json-structure">
@@ -1386,83 +1316,46 @@ implementations.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
         <h3 id="name-json-structure">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-json-structure" class="section-name selfRef">JSON Structure</a>
         </h3>
-<p id="section-3.3-1">The top-level object contains the members defined below. The member names
-are chosen for readability by a reader of the certificate; where a member
-corresponds to an ID Token claim, the correspondence is stated. Unless
-otherwise specified, a member is <span class="bcp14">OPTIONAL</span>. This document places no
-requirement on the presence of any member whose source value is itself
-optional in <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>. Deployment profiles of this document <span class="bcp14">MAY</span> require
-the presence of specific members, and relying parties decide which members
-they require in order to accept a certificate.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-1">The top-level object contains the members defined below. The member names are chosen for readability by a reader of the certificate; where a member corresponds to an ID Token claim, the correspondence is stated. Unless otherwise specified, a member is <span class="bcp14">OPTIONAL</span>. This document places no requirement on the presence of any member whose source value is itself optional in <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>. Deployment profiles of this document <span class="bcp14">MAY</span> require the presence of specific members, and relying parties decide which members they require in order to accept a certificate.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3.3-2">
           <dt id="section-3.3-2.1">iss:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-2.2">
-            <p id="section-3.3-2.2.1"><span class="bcp14">REQUIRED</span>. String. The Issuer Identifier of the OpenID Provider that
-authenticated the End-User, as given by the <code>iss</code> claim of the ID Token.
-This is a URL using the https scheme with no query or fragment component,
-as specified in Section 2 of <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>. This member corresponds to
-the <code>IdentityProvider</code> attribute of SACI.<a href="#section-3.3-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-3.3-2.2.1"><span class="bcp14">REQUIRED</span>. String. The Issuer Identifier of the OpenID Provider that authenticated the End-User, as given by the <code>iss</code> claim of the ID Token. This is a URL using the https scheme with no query or fragment component, as specified in Section 2 of <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>. This member corresponds to the <code>IdentityProvider</code> attribute of SACI.<a href="#section-3.3-2.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-2.3">auth_time:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-2.4">
-            <p id="section-3.3-2.4.1">String. The time at which the End-User authentication occurred, taken
-from the <code>auth_time</code> claim of the ID Token. The value is expressed as a
-date-time string according to <span>[<a href="#RFC3339" class="cite xref">RFC3339</a>]</span> in UTC, using the "Z" time zone
-designator and without fractional seconds, e.g.
-<code>2026-10-19T13:04:05Z</code>. If the ID Token contains no <code>auth_time</code> claim,
-this member is absent. This member corresponds to the
-<code>AuthenticationInstant</code> attribute of SACI.<a href="#section-3.3-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-3.3-2.4.1">Number. The time at which the End-User authentication occurred, as given by the <code>auth_time</code> claim of the ID Token. The value is a NumericDate as defined in Section 2 of <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>: the number of seconds from 1970-01-01T00:00:00Z UTC until the time of authentication, ignoring leap seconds, expressed as a JSON number. This member corresponds to the <code>AuthenticationInstant</code> attribute of SACI.<a href="#section-3.3-2.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-2.5">acr:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-2.6">
-            <p id="section-3.3-2.6.1">Array of strings. The Authentication Context Class Reference values
-satisfied by the authentication. The array <span class="bcp14">MUST</span> contain at least one
-element when present. In most cases the array contains exactly one
-element, the value of the <code>acr</code> claim of the ID Token. A CA <span class="bcp14">MAY</span> list more
-than one value when it has determined that the performed authentication
-satisfies more than one authentication context class; how such a
-determination is made is out of scope for this document. The array
-carries no ordering semantics. This member corresponds to the
-<code>AuthnContextClassRef</code> attribute of SACI.<a href="#section-3.3-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-3.3-2.6.1">String. The Authentication Context Class Reference of the authentication, as given by the <code>acr</code> claim of the ID Token. This member corresponds to the <code>AuthnContextClassRef</code> attribute of SACI.<a href="#section-3.3-2.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-2.7">amr:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-2.8">
-            <p id="section-3.3-2.8.1">Array of strings. The Authentication Methods References of the
-authentication, as given by the <code>amr</code> claim of the ID Token. Values are
-as registered in the "Authentication Method Reference Values" registry
-established by <span>[<a href="#RFC8176" class="cite xref">RFC8176</a>]</span>, or values defined by agreement between the OP
-and the RP. The array <span class="bcp14">MUST</span> contain at least one element when present.
-This member has no counterpart in SACI. See <a href="#sec-amr" class="auto internal xref">Section 5.3</a> for the
-intended use of this member.<a href="#section-3.3-2.8.1" class="pilcrow">¶</a></p>
+            <p id="section-3.3-2.8.1">Array of strings. The Authentication Methods References of the authentication, as given by the <code>amr</code> claim of the ID Token. Values are as registered in the "Authentication Method Reference Values" registry established by <span>[<a href="#RFC8176" class="cite xref">RFC8176</a>]</span>, or values defined by agreement between the OP and the RP. The array <span class="bcp14">MUST</span> contain at least one element when present. This member has no counterpart in SACI. See <a href="#sec-amr" class="auto internal xref">Section 5.3</a> for the relationship between this member and <code>acr</code>.<a href="#section-3.3-2.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-2.9">jti:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-2.10">
-            <p id="section-3.3-2.10.1">String. A unique identifier of the ID Token, as given by the <code>jti</code> claim
-of the ID Token. This member corresponds to the <code>AssertionRef</code> attribute
-of SACI. Note that <code>jti</code> is <span class="bcp14">OPTIONAL</span> in an ID Token.<a href="#section-3.3-2.10.1" class="pilcrow">¶</a></p>
+            <p id="section-3.3-2.10.1">String. A unique identifier of the ID Token, as given by the <code>jti</code> claim of the ID Token. This member corresponds to the <code>AssertionRef</code> attribute of SACI. Note that <code>jti</code> is <span class="bcp14">OPTIONAL</span> in an ID Token.<a href="#section-3.3-2.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-3.3-2.11">client_id:</dt>
+<dt id="section-3.3-2.11">sub:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-2.12">
-            <p id="section-3.3-2.12.1">String. The OAuth 2.0 client identifier under which the CA acted as
-Relying Party towards the OpenID Provider. This value appears as an
-audience of the ID Token (the <code>aud</code> claim) and, where present, as the
-<code>azp</code> claim. This member corresponds to the <code>ServiceID</code> attribute of
-SACI.<a href="#section-3.3-2.12.1" class="pilcrow">¶</a></p>
+            <p id="section-3.3-2.12.1">String. The Subject Identifier of the End-User at the OpenID Provider, as given by the <code>sub</code> claim of the ID Token. Together with <code>iss</code>, <code>client_id</code> and <code>auth_time</code>, this member allows the authentication event to be located in the records of the OpenID Provider, which is of particular use when the ID Token carried no <code>jti</code> claim. The value is opaque to the CA and to relying parties, and may be a pairwise identifier that is specific to the <code>client_id</code>. This member has no counterpart in SACI. See <a href="#privacy" class="auto internal xref">Section 5.4</a> for considerations on including this member.<a href="#section-3.3-2.12.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-3.3-2.13">claim_mappings:</dt>
+<dt id="section-3.3-2.13">client_id:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-2.14">
-            <p id="section-3.3-2.14.1">Array of objects. Each object describes how one claim about the End-User,
-obtained from the ID Token or from the UserInfo endpoint of the OP, was
-used to populate a subject name attribute in the certificate. The
-structure of each object is defined in <a href="#claim-mapping" class="auto internal xref">Section 3.4</a>. This member
-corresponds to the <code>IdAttributes</code> element of SACI. The array <span class="bcp14">MUST</span> contain
-at least one element when present.<a href="#section-3.3-2.14.1" class="pilcrow">¶</a></p>
+            <p id="section-3.3-2.14.1">String. The OAuth 2.0 client identifier under which the CA acted as Relying Party towards the OpenID Provider. This value appears as an audience of the ID Token (the <code>aud</code> claim). This member corresponds to the <code>ServiceID</code> attribute of SACI.<a href="#section-3.3-2.14.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-3.3-2.15">claim_mappings:</dt>
+          <dd style="margin-left: 1.5em" id="section-3.3-2.16">
+            <p id="section-3.3-2.16.1">Array of objects. Each object describes how one claim about the End-User, obtained from the ID Token or from the UserInfo Response, was used to populate a subject name attribute in the certificate. The structure of each object is defined in <a href="#claim-mapping" class="auto internal xref">Section 3.4</a>. This member corresponds to the <code>IdAttributes</code> element of SACI. The array <span class="bcp14">MUST</span> contain at least one element when present.<a href="#section-3.3-2.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1473,21 +1366,15 @@ at least one element when present.<a href="#section-3.3-2.14.1" class="pilcrow">
         <h3 id="name-claim-mapping">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-claim-mapping" class="section-name selfRef">Claim Mapping</a>
         </h3>
-<p id="section-3.4-1">A claim mapping object records that the value of a certificate subject name
-attribute was derived from an End-User claim. In contrast to SACI, the claim
-value itself is not repeated in the mapping; the value is present in the
-certificate attribute to which the mapping refers.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">A claim mapping object records that the value of a certificate subject name attribute was derived from an End-User claim. In contrast to SACI, the claim value itself is not repeated in the mapping; the value is present in the certificate attribute to which the mapping refers.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">Each claim mapping object contains the following members:<a href="#section-3.4-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3.4-3">
           <dt id="section-3.4-3.1">type:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.2">
-            <p id="section-3.4-3.2.1"><span class="bcp14">REQUIRED</span>. String. One of the values <code>rdn</code>, <code>san</code> or <code>sda</code>, with the
-meaning defined for the <code>Type</code> attribute in Section 3.1.2 of
-<span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>:<a href="#section-3.4-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-3.4-3.2.1"><span class="bcp14">REQUIRED</span>. String. One of the values <code>rdn</code>, <code>san</code> or <code>sda</code>, with the meaning defined for the <code>Type</code> attribute in Section 3.1.2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>:<a href="#section-3.4-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.4-3.2.2.1">
-                <p id="section-3.4-3.2.2.1.1"><code>rdn</code> - an attribute in a Relative Distinguished Name of the
-certificate <code>subject</code> field.<a href="#section-3.4-3.2.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-3.4-3.2.2.1.1"><code>rdn</code> - an attribute in a Relative Distinguished Name of the certificate <code>subject</code> field.<a href="#section-3.4-3.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.4-3.2.2.2">
                 <p id="section-3.4-3.2.2.2.1"><code>san</code> - a name in the Subject Alternative Name extension.<a href="#section-3.4-3.2.2.2.1" class="pilcrow">¶</a></p>
@@ -1500,47 +1387,29 @@ certificate <code>subject</code> field.<a href="#section-3.4-3.2.2.1.1" class="p
           <dd class="break"></dd>
 <dt id="section-3.4-3.3">ref:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.4">
-            <p id="section-3.4-3.4.1"><span class="bcp14">REQUIRED</span>. String. Identifies the certificate attribute or name form,
-with the same content rules as the <code>Ref</code> attribute in Section 3.1.2 of
-<span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>:<a href="#section-3.4-3.4.1" class="pilcrow">¶</a></p>
+            <p id="section-3.4-3.4.1"><span class="bcp14">REQUIRED</span>. String. Identifies the certificate attribute or name form, with the same content rules as the <code>Ref</code> attribute in Section 3.1.2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>:<a href="#section-3.4-3.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.4-3.4.2.1">
-                <p id="section-3.4-3.4.2.1.1">For type <code>rdn</code> and <code>sda</code>, the object identifier of the attribute type,
-in dotted-decimal notation (a sequence of decimal integers separated by
-periods, with no other characters).<a href="#section-3.4-3.4.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-3.4-3.4.2.1.1">For type <code>rdn</code> and <code>sda</code>, the object identifier of the attribute type, in dotted-decimal notation (a sequence of decimal integers separated by periods, with no other characters).<a href="#section-3.4-3.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.4-3.4.2.2">
-                <p id="section-3.4-3.4.2.2.1">For type <code>san</code>, the decimal tag number of the <code>GeneralName</code> choice,
-e.g. <code>1</code> for <code>rfc822Name</code> and <code>2</code> for <code>dNSName</code>. For the <code>otherName</code>
-choice, the object identifier of the <code>type-id</code> in dotted-decimal
-notation.<a href="#section-3.4-3.4.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-3.4-3.4.2.2.1">For type <code>san</code>, the decimal tag number of the <code>GeneralName</code> choice, e.g. <code>1</code> for <code>rfc822Name</code> and <code>2</code> for <code>dNSName</code>. For the <code>otherName</code> choice, the object identifier of the <code>type-id</code> in dotted-decimal notation.<a href="#section-3.4-3.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.4-3.5">claim:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.6">
-            <p id="section-3.4-3.6.1"><span class="bcp14">REQUIRED</span>. String. A JSON Pointer <span>[<a href="#RFC6901" class="cite xref">RFC6901</a>]</span> identifying the claim within
-the set of claims about the End-User, where the root of the pointer is
-the ID Token claims set (or the UserInfo response object, see <code>source</code>).
-For a standard top-level claim this is simply <code>/</code> followed by the claim
-name, e.g. <code>/given_name</code>. The pointer form allows reference to members of
-structured claims, e.g. <code>/address/street_address</code>, and to claims in
-aggregated or distributed claim sets.<a href="#section-3.4-3.6.1" class="pilcrow">¶</a></p>
+            <p id="section-3.4-3.6.1"><span class="bcp14">REQUIRED</span>. String. A JSON Pointer <span>[<a href="#RFC6901" class="cite xref">RFC6901</a>]</span> identifying the claim within the set of claims about the End-User, where the root of the pointer is the ID Token claims set (or the UserInfo Response, see <code>source</code>). For a standard top-level claim this is simply <code>/</code> followed by the claim name, e.g. <code>/given_name</code>. The pointer form allows reference to members of structured claims, e.g. <code>/address/street_address</code>, and to claims in aggregated or distributed claim sets.<a href="#section-3.4-3.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.4-3.7">source:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.8">
-            <p id="section-3.4-3.8.1">String. Indicates where the claim was obtained. The value <code>id_token</code>
-indicates the ID Token; the value <code>userinfo</code> indicates the UserInfo
-endpoint response. When absent, the default value is <code>id_token</code>.<a href="#section-3.4-3.8.1" class="pilcrow">¶</a></p>
+            <p id="section-3.4-3.8.1">String. Indicates where the claim was obtained. The value <code>id_token</code> indicates the ID Token; the value <code>userinfo</code> indicates the UserInfo Response. When absent, the default value is <code>id_token</code>.<a href="#section-3.4-3.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-3.4-4">A single certificate attribute <span class="bcp14">MAY</span> be derived from more than one claim, in
-which case several claim mapping objects share the same <code>type</code> and <code>ref</code>
-values. A single claim <span class="bcp14">MAY</span> be mapped to more than one certificate
-attribute.<a href="#section-3.4-4" class="pilcrow">¶</a></p>
+<p id="section-3.4-4">A single certificate attribute <span class="bcp14">MAY</span> be derived from more than one claim, in which case several claim mapping objects share the same <code>type</code> and <code>ref</code> values. A single claim <span class="bcp14">MAY</span> be mapped to more than one certificate attribute. <a href="#example-oaci" class="auto internal xref">Appendix A.1</a> shows a set of claim mappings for a typical certificate subject.<a href="#section-3.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="schema">
@@ -1548,11 +1417,8 @@ attribute.<a href="#section-3.4-4" class="pilcrow">¶</a></p>
         <h3 id="name-schema">
 <a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-schema" class="section-name selfRef">Schema</a>
         </h3>
-<p id="section-3.5-1">The following schema, expressed in YAML using the vocabulary of
-<span>[<a href="#JSON-SCHEMA" class="cite xref">JSON-SCHEMA</a>]</span>, is a normative statement of the structure defined in
-<a href="#json-structure" class="auto internal xref">Section 3.3</a> and <a href="#claim-mapping" class="auto internal xref">Section 3.4</a>. In case of conflict between the
-prose and the schema, the prose takes precedence.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
-<div class="breakable lang-yaml sourcecode" id="section-3.5-2">
+<p id="section-3.5-1">The following schema, expressed in YAML using the vocabulary of <span>[<a href="#JSON-SCHEMA" class="cite xref">JSON-SCHEMA</a>]</span>, is a normative statement of the structure defined in <a href="#json-structure" class="auto internal xref">Section 3.3</a> and <a href="#claim-mapping" class="auto internal xref">Section 3.4</a>. In case of conflict between the prose and the schema, the prose takes precedence.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<div class="lang-yaml sourcecode" id="section-3.5-2">
 <pre>
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "urn:ietf:params:x509-auth-context:oidc"
@@ -1564,20 +1430,18 @@ properties:
     type: string
     format: uri
   auth_time:
-    type: string
-    format: date-time
-    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    type: number
+    minimum: 0
   acr:
-    type: array
-    minItems: 1
-    items:
-      type: string
+    type: string
   amr:
     type: array
     minItems: 1
     items:
       type: string
   jti:
+    type: string
+  sub:
     type: string
   client_id:
     type: string
@@ -1606,23 +1470,15 @@ $defs:
         default: id_token
 </pre><a href="#section-3.5-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.5-3">Unrecognized members are permitted everywhere; the schema intentionally
-does not set <code>additionalProperties</code> to <code>false</code>.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+<p id="section-3.5-3">Unrecognized members are permitted everywhere; the schema intentionally does not set <code>additionalProperties</code> to <code>false</code>.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="relationship">
 <section id="section-3.6">
         <h3 id="name-relationship-to-the-id-toke">
-<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-relationship-to-the-id-toke" class="section-name selfRef">Relationship to the ID Token</a>
+<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-relationship-to-the-id-toke" class="section-name selfRef">Relationship to the ID Token and UserInfo Response</a>
         </h3>
-<p id="section-3.6-1">The OACI object is produced by the CA from an ID Token (and optionally a
-UserInfo response) that the CA has validated according to Section 3.1.3.7
-of <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>. The OACI object is not itself a token: it carries no
-signature and no <code>exp</code> or <code>iat</code> members, because its integrity and
-lifetime are those of the certificate in which it is embedded. A relying
-party that wishes to inspect the original ID Token may use the <code>iss</code>,
-<code>client_id</code> and <code>jti</code> members to locate it, if the CA retains tokens
-according to its practices.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.6-1">The OACI object is produced by the CA from an ID Token, and where applicable a UserInfo Response, that the CA has validated according to Sections 3.1.3.7 and 5.3.4 of <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>. The OACI object is not itself a token: it carries no signature and no <code>exp</code> or <code>iat</code> members, because its integrity and lifetime are those of the certificate in which it is embedded. A relying party that wishes to inspect the original ID Token may use the <code>iss</code>, <code>client_id</code> and <code>jti</code> members to locate it, if the CA retains tokens according to its practices.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1637,33 +1493,11 @@ according to its practices.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
         <h3 id="name-processing-of-unsupported-c">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-processing-of-unsupported-c" class="section-name selfRef">Processing of Unsupported Context Types</a>
         </h3>
-<p id="section-4.1-1">Section 2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> states that an application that finds an
-authentication context information type it does not understand <span class="bcp14">MUST</span> ignore
-it if the extension is non-critical and <span class="bcp14">MUST</span> reject the certificate if the
-extension is marked critical.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">This rule conflates two separate matters: whether an application recognizes
-the Authentication Context extension, which is what the criticality flag of
-<span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span> governs, and how an application that does recognize the
-extension treats individual <code>AuthenticationContext</code> entries. The
-information carried by the extension is descriptive. It allows a relying
-party that cares about the origin of the subject's identity to evaluate it
-against its own policy, but it requires no action from a relying party that
-does not. Requiring every relying party to support every context type
-present in a certificate therefore serves no security purpose, and it
-prevents a CA from including several context types in one certificate, for
-example to serve both legacy applications and new applications that support
-different versions of the same information.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">Section 2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> states that an application that finds an authentication context information type it does not understand <span class="bcp14">MUST</span> ignore it if the extension is non-critical and <span class="bcp14">MUST</span> reject the certificate if the extension is marked critical.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">This rule conflates two separate matters: whether an application recognizes the Authentication Context extension, which is what the criticality flag of <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span> governs, and how an application that does recognize the extension treats individual <code>AuthenticationContext</code> entries. The information carried by the extension is descriptive. It allows a relying party that cares about the origin of the subject's identity to evaluate it against its own policy, but it requires no action from a relying party that does not. Requiring every relying party to support every context type present in a certificate therefore serves no security purpose, and it prevents a CA from including several context types in one certificate, for example to serve both legacy applications and new applications that support different versions of the same information.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1-3">Accordingly, the rule is replaced by the following.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1-4">An application that recognizes the Authentication Context extension <span class="bcp14">MUST</span> be
-able to parse the <code>AuthenticationContexts</code> structure. It processes each
-<code>AuthenticationContext</code> entry whose <code>contextType</code> it supports according to
-the specification of that context type, and <span class="bcp14">MUST</span> ignore each
-<code>AuthenticationContext</code> entry whose <code>contextType</code> it does not support. This
-applies irrespective of whether the extension is marked critical.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
-<p id="section-4.1-5">The criticality flag of the extension retains only its meaning under
-Section 4.2 of <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>: an application that does not recognize the
-Authentication Context extension at all <span class="bcp14">MUST</span> reject a certificate in which
-the extension is marked critical.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">An application that recognizes the Authentication Context extension <span class="bcp14">MUST</span> be able to parse the <code>AuthenticationContexts</code> structure. It processes each <code>AuthenticationContext</code> entry whose <code>contextType</code> it supports according to the specification of that context type, and <span class="bcp14">MUST</span> ignore each <code>AuthenticationContext</code> entry whose <code>contextType</code> it does not support. This applies irrespective of whether the extension is marked critical.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1-5">The criticality flag of the extension retains only its meaning under Section 4.2 of <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>: an application that does not recognize the Authentication Context extension at all <span class="bcp14">MUST</span> reject a certificate in which the extension is marked critical.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="criticality">
@@ -1672,11 +1506,7 @@ the extension is marked critical.<a href="#section-4.1-5" class="pilcrow">¶</a>
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-criticality" class="section-name selfRef">Criticality</a>
         </h3>
 <p id="section-4.2-1">Section 2 of <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> states that the extension <span class="bcp14">MAY</span> be marked critical.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">Since the extension carries descriptive information and mandates no action
-by a relying party, marking it critical excludes relying parties that do
-not implement the extension without providing any corresponding benefit.
-This document updates <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> as follows: the Authentication Context
-extension <span class="bcp14">SHOULD NOT</span> be marked critical.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">Since the extension carries descriptive information and mandates no action by a relying party, marking it critical excludes relying parties that do not implement the extension without providing any corresponding benefit. This document updates <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span> as follows: the Authentication Context extension <span class="bcp14">SHOULD NOT</span> be marked critical.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1692,12 +1522,7 @@ extension <span class="bcp14">SHOULD NOT</span> be marked critical.<a href="#sec
         <h3 id="name-trust-in-the-recorded-infor">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-trust-in-the-recorded-infor" class="section-name selfRef">Trust in the Recorded Information</a>
         </h3>
-<p id="section-5.1-1">The information in an OACI object is asserted by the CA, not by the OpenID
-Provider. The CA copies values from an ID Token that it validated at the
-time of issuance; a relying party has no means of re-validating the ID
-Token from the certificate alone. A relying party therefore trusts the OACI
-content to exactly the extent that it trusts the CA, as expressed in the
-CA's certificate policy and practices.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">The information in an OACI object is asserted by the CA, not by the OpenID Provider. The CA, or an RA acting on its behalf, copies values from an ID Token and UserInfo Response that it validated at the time of issuance; a relying party has no means of re-validating these from the certificate alone. A relying party therefore trusts the OACI content to exactly the extent that it trusts the CA, as expressed in the CA's certificate policy and practices. Where an RA performs the authentication, the CA's trust in the RA, and the means by which the authentication information is conveyed from the RA to the CA, are matters for the CA's practices and are outside the scope of this document.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authentication-context-class-references">
@@ -1705,13 +1530,7 @@ CA's certificate policy and practices.<a href="#section-5.1-1" class="pilcrow">�
         <h3 id="name-authentication-context-clas">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-authentication-context-clas" class="section-name selfRef">Authentication Context Class References</a>
         </h3>
-<p id="section-5.2-1">The values in the <code>acr</code> array are only meaningful within the trust
-framework that defines them. A relying party <span class="bcp14">MUST NOT</span> infer an assurance
-level from an <code>acr</code> value defined by a framework it does not recognize.
-When a CA lists more than one <code>acr</code> value, it asserts that the authentication
-satisfied each of them; a CA <span class="bcp14">MUST NOT</span> list a value it has not verified to be
-satisfied, since a relying party will typically accept a certificate if any
-one listed value meets its policy.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-1">The value of the <code>acr</code> member is only meaningful within the trust framework that defines it. A relying party <span class="bcp14">MUST NOT</span> infer an assurance level from an <code>acr</code> value defined by a framework it does not recognize.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-amr">
@@ -1719,14 +1538,8 @@ one listed value meets its policy.<a href="#section-5.2-1" class="pilcrow">¶</a
         <h3 id="name-authentication-methods-refe">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-authentication-methods-refe" class="section-name selfRef">Authentication Methods References</a>
         </h3>
-<p id="section-5.3-1">The <code>amr</code> member is informative. As noted in Section 4 of <span>[<a href="#RFC8176" class="cite xref">RFC8176</a>]</span>, <code>amr</code>
-values are asserted by the OP without any standardized means of
-verification and are not a substitute for an authentication context class.
-A CA or relying party <span class="bcp14">SHOULD NOT</span> base an assurance decision solely on <code>amr</code>
-values. The member is provided so that the concrete methods used can be
-recorded for audit and troubleshooting, and because <code>amr</code> values, unlike
-<code>acr</code> values, are drawn from a public registry and remain interpretable
-outside the originating trust framework.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-1">The <code>amr</code> member is informative. As noted in Section 4 of <span>[<a href="#RFC8176" class="cite xref">RFC8176</a>]</span>, <code>amr</code> values are asserted by the OP without any standardized means of verification and are not a substitute for an authentication context class. The member is provided so that the concrete methods used can be recorded for audit and troubleshooting, and because <code>amr</code> values, unlike <code>acr</code> values, are drawn from a public registry and remain interpretable outside the originating trust framework.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">The <code>acr</code> and <code>amr</code> members are complementary, not alternatives: <code>acr</code> is the OP's statement of the assurance achieved, and <code>amr</code> describes the methods used to achieve it. When both are present, <code>acr</code> governs. A relying party <span class="bcp14">MUST NOT</span> use <code>amr</code> values to raise or lower the assurance it attributes to the <code>acr</code> value, and <span class="bcp14">SHOULD NOT</span> base an assurance decision solely on <code>amr</code> values when <code>acr</code> is absent. An apparent inconsistency between the two, for example an <code>acr</code> value denoting a high assurance level together with <code>amr</code> values denoting a single weak factor, is a matter between the OP and the trust framework that governs it, and is not resolved by the relying party.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="privacy">
@@ -1734,19 +1547,9 @@ outside the originating trust framework.<a href="#section-5.3-1" class="pilcrow"
         <h3 id="name-privacy">
 <a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-privacy" class="section-name selfRef">Privacy</a>
         </h3>
-<p id="section-5.4-1">An OACI object reveals the identity of the OP that authenticated the
-subject, the time of authentication and, through <code>claim_mappings</code>, which
-identity attributes in the certificate were asserted by that OP. Together
-with the certificate serial number and <code>jti</code>, this allows a certificate to
-be correlated with an authentication event logged at the OP and the CA.
-CAs <span class="bcp14">SHOULD</span> include only members needed by the intended relying parties, and
-deployment profiles <span class="bcp14">SHOULD</span> consider whether <code>jti</code> and <code>auth_time</code> are
-required.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">This document intentionally does not define a member for the <code>sub</code> claim or
-any other End-User identifier. The claim values that were placed in the
-certificate are present in the certificate subject name; repeating them, or
-adding further identifiers, would increase the personal data carried by the
-certificate without adding information a relying party can verify.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-1">An OACI object reveals the identity of the OP that authenticated the subject, the time of authentication and, through <code>claim_mappings</code>, which identity attributes in the certificate were asserted by that OP. Together with the certificate serial number and <code>jti</code>, this allows a certificate to be correlated with an authentication event logged at the OP and the CA. CAs <span class="bcp14">SHOULD</span> include only members needed by the intended relying parties, and deployment profiles <span class="bcp14">SHOULD</span> consider whether <code>jti</code> and <code>auth_time</code> are required.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">The <code>sub</code> member is a persistent identifier of the End-User at the OpenID Provider. When the OpenID Provider issues pairwise Subject Identifiers (see Section 8 of <span>[<a href="#OIDC.Core" class="cite xref">OIDC.Core</a>]</span>), the value is specific to the <code>client_id</code> and cannot be used to correlate the End-User across Relying Parties. When the OpenID Provider issues public Subject Identifiers, the value is the same for every Relying Party of that OpenID Provider, and including it in a certificate allows anyone holding the certificate to correlate its subject with the End-User's accounts at other Relying Parties of the same OpenID Provider. A CA <span class="bcp14">SHOULD</span> include <code>sub</code> only where the ability to locate the authentication record is needed by the intended relying parties, and deployment profiles <span class="bcp14">SHOULD</span> state whether <code>sub</code> is included and under which Subject Identifier type.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-3">Beyond <code>sub</code>, this document defines no member carrying End-User claim values. The claim values that were placed in the certificate are present in the certificate subject name; repeating them would increase the personal data carried by the certificate without adding information a relying party can verify.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ignoring-unsupported-context-types">
@@ -1754,11 +1557,7 @@ certificate without adding information a relying party can verify.<a href="#sect
         <h3 id="name-ignoring-unsupported-contex">
 <a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-ignoring-unsupported-contex" class="section-name selfRef">Ignoring Unsupported Context Types</a>
         </h3>
-<p id="section-5.5-1">Under <a href="#processing" class="auto internal xref">Section 4.1</a>, an application silently ignores context types it does
-not support. A relying party whose policy requires authentication context
-information of a particular type must therefore check for the presence of
-that type explicitly and treat its absence according to policy; the absence
-of a supported entry is not an error condition in itself.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.5-1">Under <a href="#processing" class="auto internal xref">Section 4.1</a>, an application silently ignores context types it does not support. A relying party whose policy requires authentication context information of a particular type must therefore check for the presence of that type explicitly and treat its absence according to policy; the absence of a supported entry is not an error condition in itself.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1773,13 +1572,8 @@ of a supported entry is not an error condition in itself.<a href="#section-5.5-1
         <h3 id="name-x509-authentication-context">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-x509-authentication-context" class="section-name selfRef">X.509 Authentication Context Types Registry</a>
         </h3>
-<p id="section-6.1-1">IANA is requested to create a new registry titled "X.509 Authentication
-Context Types" under a new "X.509 Authentication Context" registry group.
-The registry lists the URIs defined for use as <code>contextType</code> values in the
-Authentication Context certificate extension <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>, together with the
-specification that defines the syntax of the corresponding <code>contextInfo</code>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">The registration policy is Specification Required (see <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>).
-Each entry contains:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-1">IANA is requested to create a new registry titled "X.509 Authentication Context Types" under a new "X.509 Authentication Context" registry group. The registry lists the URIs defined for use as <code>contextType</code> values in the Authentication Context certificate extension <span>[<a href="#RFC7773" class="cite xref">RFC7773</a>]</span>, together with the specification that defines the syntax of the corresponding <code>contextInfo</code>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">The registration policy is Specification Required (see <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>). Each entry contains:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-3.1">
             <p id="section-6.1-3.1.1">Context Type URI: the URI used as the <code>contextType</code> value.<a href="#section-6.1-3.1.1" class="pilcrow">¶</a></p>
@@ -1791,10 +1585,7 @@ Each entry contains:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
             <p id="section-6.1-3.3.1">Reference: the specification defining the <code>contextInfo</code> syntax.<a href="#section-6.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.1-4">Context type URIs are not required to be assigned under the URN
-sub-namespace registered in <a href="#iana-urn" class="auto internal xref">Section 6.2</a>; any URI under the control of the
-registrant is acceptable. Registrations under the URN sub-namespace are
-expected to be made by IETF documents.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">Context type URIs are not required to be assigned under the Uniform Resource Name (URN) sub-namespace registered in <a href="#iana-urn" class="auto internal xref">Section 6.2</a>; any URI under the control of the registrant is acceptable. Registrations under the URN sub-namespace are expected to be made by IETF documents.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
 <p id="section-6.1-5">The initial content of the registry is:<a href="#section-6.1-5" class="pilcrow">¶</a></p>
 <span id="name-initial-registry-content"></span><table class="center" id="table-1">
           <caption>
@@ -1830,9 +1621,7 @@ expected to be made by IETF documents.<a href="#section-6.1-4" class="pilcrow">�
         <h3 id="name-ietf-urn-sub-namespace-regi">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-ietf-urn-sub-namespace-regi" class="section-name selfRef">IETF URN Sub-namespace Registration</a>
         </h3>
-<p id="section-6.2-1">IANA is requested to register the following entry in the "IETF URN
-Sub-namespace for Registered Protocol Parameter Identifiers" registry
-established by <span>[<a href="#RFC3553" class="cite xref">RFC3553</a>]</span>:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">IANA is requested to register the following entry in the "IETF URN Sub-namespace for Registered Protocol Parameter Identifiers" registry established by <span>[<a href="#RFC3553" class="cite xref">RFC3553</a>]</span>:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-6.2-2">
           <dt id="section-6.2-2.1">Registry name:</dt>
           <dd style="margin-left: 1.5em" id="section-6.2-2.2">
@@ -1851,11 +1640,7 @@ established by <span>[<a href="#RFC3553" class="cite xref">RFC3553</a>]</span>:<
           <dd class="break"></dd>
 <dt id="section-6.2-2.7">Index value:</dt>
           <dd style="margin-left: 1.5em" id="section-6.2-2.8">
-            <p id="section-6.2-2.8.1">The index value is the string following the prefix
-<code>urn:ietf:params:x509-auth-context:</code>. Values are registered as complete
-URIs in the "X.509 Authentication Context Types" registry; the entries
-of that registry beginning with the prefix constitute the values of this
-sub-namespace.<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
+            <p id="section-6.2-2.8.1">The index value is the string following the prefix <code>urn:ietf:params:x509-auth-context:</code>. Values are registered as complete URIs in the "X.509 Authentication Context Types" registry; the entries of that registry beginning with the prefix constitute the values of this sub-namespace.<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1882,10 +1667,6 @@ sub-namespace.<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC3339">[RFC3339]</dt>
-        <dd>
-<span class="refAuthor">Klyne, G.</span> and <span class="refAuthor">C. Newman</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps"</span>, <span class="seriesInfo">RFC 3339</span>, <span class="seriesInfo">DOI 10.17487/RFC3339</span>, <time datetime="2002-07" class="refDate">July 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3339">https://www.rfc-editor.org/rfc/rfc3339</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC3553">[RFC3553]</dt>
         <dd>
 <span class="refAuthor">Mealling, M.</span>, <span class="refAuthor">Masinter, L.</span>, <span class="refAuthor">Hardie, T.</span>, and <span class="refAuthor">G. Klyne</span>, <span class="refTitle">"An IETF URN Sub-namespace for Registered Protocol Parameters"</span>, <span class="seriesInfo">BCP 73</span>, <span class="seriesInfo">RFC 3553</span>, <span class="seriesInfo">DOI 10.17487/RFC3553</span>, <time datetime="2003-06" class="refDate">June 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3553">https://www.rfc-editor.org/rfc/rfc3553</a>&gt;</span>. </dd>
@@ -1901,6 +1682,10 @@ sub-namespace.<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
 <dt id="RFC7493">[RFC7493]</dt>
         <dd>
 <span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The I-JSON Message Format"</span>, <span class="seriesInfo">RFC 7493</span>, <span class="seriesInfo">DOI 10.17487/RFC7493</span>, <time datetime="2015-03" class="refDate">March 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7493">https://www.rfc-editor.org/rfc/rfc7493</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7519">[RFC7519]</dt>
+        <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Token (JWT)"</span>, <span class="seriesInfo">RFC 7519</span>, <span class="seriesInfo">DOI 10.17487/RFC7519</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7519">https://www.rfc-editor.org/rfc/rfc7519</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7773">[RFC7773]</dt>
         <dd>
@@ -1931,10 +1716,6 @@ sub-namespace.<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
         <dd>
 <span class="refAuthor">Wright, A.</span>, <span class="refAuthor">Andrews, H.</span>, <span class="refAuthor">Hutton, B.</span>, and <span class="refAuthor">G. Dennis</span>, <span class="refTitle">"JSON Schema: A Media Type for Describing JSON Documents"</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://json-schema.org/draft/2020-12/json-schema-core">https://json-schema.org/draft/2020-12/json-schema-core</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC7519">[RFC7519]</dt>
-        <dd>
-<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Token (JWT)"</span>, <span class="seriesInfo">RFC 7519</span>, <span class="seriesInfo">DOI 10.17487/RFC7519</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7519">https://www.rfc-editor.org/rfc/rfc7519</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8176">[RFC8176]</dt>
       <dd>
 <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Hunt, P.</span>, and <span class="refAuthor">A. Nadalin</span>, <span class="refTitle">"Authentication Method Reference Values"</span>, <span class="seriesInfo">RFC 8176</span>, <span class="seriesInfo">DOI 10.17487/RFC8176</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8176">https://www.rfc-editor.org/rfc/rfc8176</a>&gt;</span>. </dd>
@@ -1949,26 +1730,21 @@ sub-namespace.<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
       <h2 id="name-examples">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
       </h2>
-<div id="example-oaci-object">
+<div id="example-oaci">
 <section id="appendix-A.1">
         <h3 id="name-example-oaci-object">
 <a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-example-oaci-object" class="section-name selfRef">Example OACI Object</a>
         </h3>
-<p id="appendix-A.1-1">The following OACI object records an authentication performed by the
-OpenID Provider <code>https://op.example.com</code> at a context class defined by an
-example trust framework. The certificate subject name contains the
-End-User's given name (OID 2.5.4.42), surname (OID 2.5.4.4) and serial
-number (OID 2.5.4.5), and an email address in the Subject Alternative Name
-extension, all derived from ID Token claims.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-1">The following OACI object records an authentication performed by the OpenID Provider <code>https://op.example.com</code> at a context class defined by an example trust framework. The certificate subject name contains the End-User's given name (object identifier (OID) 2.5.4.42), surname (OID 2.5.4.4) and serial number (OID 2.5.4.5), and an email address in the Subject Alternative Name extension, all derived from ID Token claims.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
 <div class="lang-json sourcecode" id="appendix-A.1-2">
 <pre>
 {
   "iss": "https://op.example.com",
-  "auth_time": "2026-10-19T13:04:05Z",
-  "acr": ["http://id.example.org/loa/3"],
+  "auth_time": 1792415045,
+  "acr": "http://id.example.org/loa/3",
   "amr": ["sc", "pin"],
   "jti": "0f3e2c6a-7b1d-4e4c-9a2e-5d1c2b3a4f60",
-  "client_id": "ca.example.com",
+  "client_id": "https://sign.example.com",
   "claim_mappings": [
     { "type": "rdn", "ref": "2.5.4.42", "claim": "/given_name" },
     { "type": "rdn", "ref": "2.5.4.4",  "claim": "/family_name" },
@@ -1979,14 +1755,8 @@ extension, all derived from ID Token claims.<a href="#appendix-A.1-1" class="pil
 }
 </pre><a href="#appendix-A.1-2" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.1-3">Note that the third mapping refers to a claim whose name is itself a URI.
-Since <code>/</code> is the reference token separator in a JSON Pointer, the <code>/</code>
-characters inside the claim name are escaped as <code>~1</code> (see Section 3 of
-<span>[<a href="#RFC6901" class="cite xref">RFC6901</a>]</span>).<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-4">[[ Editor's note: claims with URI names are common in national profiles and
-the escaping makes them hard to read. Consider instead a plain claim name in
-<code>claim</code> with a separate <span class="bcp14">OPTIONAL</span> <code>path</code> member (a JSON Pointer relative to
-the claim) for members of structured claims. ]]<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-3">Note that the third mapping refers to a claim whose name is itself a URI. Since <code>/</code> is the reference token separator in a JSON Pointer, the <code>/</code> characters inside the claim name are escaped as <code>~1</code> (see Section 3 of <span>[<a href="#RFC6901" class="cite xref">RFC6901</a>]</span>).<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-4">[[ Editor's note: claims with URI names are common in national profiles and the escaping makes them hard to read. Consider instead a plain claim name in <code>claim</code> with a separate <span class="bcp14">OPTIONAL</span> <code>path</code> member (a JSON Pointer relative to the claim) for members of structured claims. ]]<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="example-extension">
@@ -1994,10 +1764,7 @@ the claim) for members of structured claims. ]]<a href="#appendix-A.1-4" class="
         <h3 id="name-example-extension">
 <a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-example-extension" class="section-name selfRef">Example Extension</a>
         </h3>
-<p id="appendix-A.2-1">The <code>AuthenticationContext</code> carrying the above object has
-<code>contextType</code> set to <code>urn:ietf:params:x509-auth-context:oidc</code> and
-<code>contextInfo</code> set to the compact serialization of the object. A DER
-rendering of the complete extension will be added in a future revision.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-1">The <code>AuthenticationContext</code> carrying the above object has <code>contextType</code> set to <code>urn:ietf:params:x509-auth-context:oidc</code> and <code>contextInfo</code> set to the compact serialization of the object. A Distinguished Encoding Rules (DER) rendering of the complete extension will be added in a future revision.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2010,25 +1777,13 @@ rendering of the complete extension will be added in a future revision.<a href="
 <p id="appendix-B-1">[[ This section is intended to be removed before publication as an RFC. ]]<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-2.1">
-          <p id="appendix-B-2.1.1"><code>acr</code> is an array even when only one value is present, so that consumers
-implement one code path.<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-2.1.1">Member names and value formats follow the ID Token claims where there is a direct correspondence (<code>iss</code>, <code>auth_time</code>, <code>acr</code>, <code>amr</code>, <code>jti</code>), so that a CA copies values without conversion, but the structure is not a JWT claims set and is not intended to be processed as one.<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-2.2">
-          <p id="appendix-B-2.2.1">Member names follow the ID Token claim names where that aids
-recognition (<code>iss</code>, <code>acr</code>, <code>amr</code>, <code>jti</code>, <code>auth_time</code>) but the
-structure is not a JWT claims set and is not intended to be processed as
-one; <code>auth_time</code> in particular uses RFC 3339 text rather than NumericDate
-for readability in certificate viewers.<a href="#appendix-B-2.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-2.2.1">Claim values are not repeated in <code>claim_mappings</code>, unlike SACI, because they are already present in the certificate and repeating them has not proven useful in practice.<a href="#appendix-B-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-2.3">
-          <p id="appendix-B-2.3.1">Claim values are not repeated in <code>claim_mappings</code>, unlike SACI, because
-they are already present in the certificate and repeating them has not
-proven useful in practice.<a href="#appendix-B-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-2.4">
-          <p id="appendix-B-2.4.1">The update to RFC 7773 in <a href="#updates-7773" class="auto internal xref">Section 4</a> is the reason this document
-carries "Updates: 7773". Without it, defining a new context type would
-not update RFC 7773, which already provides for additional types.<a href="#appendix-B-2.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-2.3.1">The update to RFC 7773 in <a href="#updates-7773" class="auto internal xref">Section 4</a> is the reason this document carries "Updates: 7773". Without it, defining a new context type would not update RFC 7773, which already provides for additional types.<a href="#appendix-B-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
