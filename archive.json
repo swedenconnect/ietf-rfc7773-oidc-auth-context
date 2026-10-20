@@ -1,0 +1,76 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2026-10-20T00:47:49.080515+00:00",
+  "repo": "swedenconnect/ietf-rfc7773-oidc-auth-context",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOVPTDw88AAAABJWlbPg",
+      "title": "First draft",
+      "url": "https://github.com/swedenconnect/ietf-rfc7773-oidc-auth-context/pull/1",
+      "state": "OPEN",
+      "author": "Razumain",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-10-19T14:34:02Z",
+      "updatedAt": "2026-10-19T14:43:31Z",
+      "baseRepository": "swedenconnect/ietf-rfc7773-oidc-auth-context",
+      "baseRefName": "main",
+      "baseRefOid": "c0e43e493491d9a85185368dc43d5cad56bf7277",
+      "headRepository": "swedenconnect/ietf-rfc7773-oidc-auth-context",
+      "headRefName": "draft-00",
+      "headRefOid": "74357229fed1c9a3555eb8822317de6e12a34d57",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
