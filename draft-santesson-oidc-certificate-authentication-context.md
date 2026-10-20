@@ -8,7 +8,7 @@ updates: 7773
 docname: draft-santesson-oidc-certificate-authentication-context-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
-date:
+date: 2026-10-20
 consensus: true
 v: 3
 # area: "Security"
