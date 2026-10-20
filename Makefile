@@ -14,4 +14,4 @@ else
 endif
 endif
 
-export UPLOAD_EMAIL ?= sts@aaa-sec.com
+export UPLOAD_EMAIL ?= stefan@aaa-sec.com
