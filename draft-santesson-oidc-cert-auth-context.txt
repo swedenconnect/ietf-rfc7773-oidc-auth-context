@@ -10,7 +10,7 @@ Expires: 23 April 2027
 
 
        Certificate Authentication Context Type for OpenID Connect
-     draft-santesson-oidc-certificate-authentication-context-latest
+             draft-santesson-oidc-cert-auth-context-latest
 
 Abstract
 
@@ -39,8 +39,8 @@ About This Document
    https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/draft-
    santesson-oidc-certificate-authentication-context.html.  Status
    information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-santesson-oidc-certificate-
-   authentication-context/.
+   https://datatracker.ietf.org/doc/draft-santesson-oidc-cert-auth-
+   context/.
 
    Source for this draft and an issue tracker can be found at
    https://github.com/swedenconnect/ietf-rfc7773-oidc-auth-context.
