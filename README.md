@@ -4,10 +4,10 @@
 
 This is the working area for the individual Internet-Draft, "OIDC Certificate Authentication Context".
 
-* [Editor's Copy](https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/#go.draft-santesson-oidc-certificate-authentication-context.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-santesson-oidc-certificate-authentication-context)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-santesson-oidc-certificate-authentication-context)
-* [Compare Editor's Copy to Individual Draft](https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/#go.draft-santesson-oidc-certificate-authentication-context.diff)
+* [Editor's Copy](https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/#go.draft-santesson-oidc-cert-auth-context.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-santesson-oidc-cert-auth-context)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-santesson-oidc-cert-auth-context)
+* [Compare Editor's Copy to Individual Draft](https://swedenconnect.github.io/ietf-rfc7773-oidc-auth-context/#go.draft-santesson-oidc-cert-auth-context.diff)
 
 
 ## Contributing
