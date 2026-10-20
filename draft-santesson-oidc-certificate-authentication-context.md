@@ -1,5 +1,5 @@
 ---
-title: "OpenID Connect Certificate Authentication Context"
+title: "Certificate Authentication Context Type for OpenID Connect"
 abbrev: "OIDC Cert Auth Context"
 ipr: trust200902
 category: std
@@ -49,11 +49,11 @@ author:
     email: martin@litsec.se
 
 normative:
-  RFC3339:
   RFC3553:
   RFC5280:
   RFC6901:
   RFC7493:
+  RFC7519:
   RFC7773:
   RFC8259:
   OIDC.Core:
@@ -68,7 +68,6 @@ normative:
     target: https://openid.net/specs/openid-connect-core-1_0.html
 
 informative:
-  RFC7519:
   RFC8176:
   JSON-SCHEMA:
     title: "JSON Schema: A Media Type for Describing JSON Documents"
@@ -140,19 +139,22 @@ iss:
 : REQUIRED. String. The Issuer Identifier of the OpenID Provider that authenticated the End-User, as given by the `iss` claim of the ID Token. This is a URL using the https scheme with no query or fragment component, as specified in Section 2 of {{OIDC.Core}}. This member corresponds to the `IdentityProvider` attribute of SACI.
 
 auth_time:
-: String. The time at which the End-User authentication occurred, taken from the `auth_time` claim of the ID Token. The value is expressed as a date-time string according to {{RFC3339}} in UTC, using the "Z" time zone designator and without fractional seconds, e.g. `2026-10-19T13:04:05Z`. If the ID Token contains no `auth_time` claim, this member is absent. This member corresponds to the `AuthenticationInstant` attribute of SACI.
+: Number. The time at which the End-User authentication occurred, as given by the `auth_time` claim of the ID Token. The value is a NumericDate as defined in Section 2 of {{RFC7519}}: the number of seconds from 1970-01-01T00:00:00Z UTC until the time of authentication, ignoring leap seconds, expressed as a JSON number. This member corresponds to the `AuthenticationInstant` attribute of SACI.
 
 acr:
-: Array of strings. The Authentication Context Class Reference values satisfied by the authentication. The array MUST contain at least one element when present. In most cases the array contains exactly one element, the value of the `acr` claim of the ID Token. A CA MAY list more than one value when it has determined that the performed authentication satisfies more than one authentication context class; how such a determination is made is out of scope for this document. The array carries no ordering semantics. This member corresponds to the `AuthnContextClassRef` attribute of SACI.
+: String. The Authentication Context Class Reference of the authentication, as given by the `acr` claim of the ID Token. This member corresponds to the `AuthnContextClassRef` attribute of SACI.
 
 amr:
-: Array of strings. The Authentication Methods References of the authentication, as given by the `amr` claim of the ID Token. Values are as registered in the "Authentication Method Reference Values" registry established by {{RFC8176}}, or values defined by agreement between the OP and the RP. The array MUST contain at least one element when present. This member has no counterpart in SACI. See {{sec-amr}} for the intended use of this member.
+: Array of strings. The Authentication Methods References of the authentication, as given by the `amr` claim of the ID Token. Values are as registered in the "Authentication Method Reference Values" registry established by {{RFC8176}}, or values defined by agreement between the OP and the RP. The array MUST contain at least one element when present. This member has no counterpart in SACI. See {{sec-amr}} for the relationship between this member and `acr`.
 
 jti:
 : String. A unique identifier of the ID Token, as given by the `jti` claim of the ID Token. This member corresponds to the `AssertionRef` attribute of SACI. Note that `jti` is OPTIONAL in an ID Token.
 
+sub:
+: String. The Subject Identifier of the End-User at the OpenID Provider, as given by the `sub` claim of the ID Token. Together with `iss`, `client_id` and `auth_time`, this member allows the authentication event to be located in the records of the OpenID Provider, which is of particular use when the ID Token carried no `jti` claim. The value is opaque to the CA and to relying parties, and may be a pairwise identifier that is specific to the `client_id`. This member has no counterpart in SACI. See {{privacy}} for considerations on including this member.
+
 client_id:
-: String. The OAuth 2.0 client identifier under which the CA acted as Relying Party towards the OpenID Provider. This value appears as an audience of the ID Token (the `aud` claim) and, where present, as the `azp` claim. This member corresponds to the `ServiceID` attribute of SACI.
+: String. The OAuth 2.0 client identifier under which the CA acted as Relying Party towards the OpenID Provider. This value appears as an audience of the ID Token (the `aud` claim). This member corresponds to the `ServiceID` attribute of SACI.
 
 claim_mappings:
 : Array of objects. Each object describes how one claim about the End-User, obtained from the ID Token or from the UserInfo Response, was used to populate a subject name attribute in the certificate. The structure of each object is defined in {{claim-mapping}}. This member corresponds to the `IdAttributes` element of SACI. The array MUST contain at least one element when present.
@@ -185,7 +187,7 @@ claim:
 source:
 : String. Indicates where the claim was obtained. The value `id_token` indicates the ID Token; the value `userinfo` indicates the UserInfo Response. When absent, the default value is `id_token`.
 
-A single certificate attribute MAY be derived from more than one claim, in which case several claim mapping objects share the same `type` and `ref` values. A single claim MAY be mapped to more than one certificate attribute.
+A single certificate attribute MAY be derived from more than one claim, in which case several claim mapping objects share the same `type` and `ref` values. A single claim MAY be mapped to more than one certificate attribute. {{example-oaci}} shows a set of claim mappings for a typical certificate subject.
 
 ## Schema {#schema}
 
@@ -202,20 +204,18 @@ properties:
     type: string
     format: uri
   auth_time:
-    type: string
-    format: date-time
-    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    type: number
+    minimum: 0
   acr:
-    type: array
-    minItems: 1
-    items:
-      type: string
+    type: string
   amr:
     type: array
     minItems: 1
     items:
       type: string
   jti:
+    type: string
+  sub:
     type: string
   client_id:
     type: string
@@ -280,17 +280,21 @@ The information in an OACI object is asserted by the CA, not by the OpenID Provi
 
 ## Authentication Context Class References
 
-The values in the `acr` array are only meaningful within the trust framework that defines them. A relying party MUST NOT infer an assurance level from an `acr` value defined by a framework it does not recognize. When a CA lists more than one `acr` value, it asserts that the authentication satisfied each of them; a CA MUST NOT list a value it has not verified to be satisfied, since a relying party will typically accept a certificate if any one listed value meets its policy.
+The value of the `acr` member is only meaningful within the trust framework that defines it. A relying party MUST NOT infer an assurance level from an `acr` value defined by a framework it does not recognize.
 
 ## Authentication Methods References {#sec-amr}
 
-The `amr` member is informative. As noted in Section 4 of {{RFC8176}}, `amr` values are asserted by the OP without any standardized means of verification and are not a substitute for an authentication context class. A CA or relying party SHOULD NOT base an assurance decision solely on `amr` values. The member is provided so that the concrete methods used can be recorded for audit and troubleshooting, and because `amr` values, unlike `acr` values, are drawn from a public registry and remain interpretable outside the originating trust framework.
+The `amr` member is informative. As noted in Section 4 of {{RFC8176}}, `amr` values are asserted by the OP without any standardized means of verification and are not a substitute for an authentication context class. The member is provided so that the concrete methods used can be recorded for audit and troubleshooting, and because `amr` values, unlike `acr` values, are drawn from a public registry and remain interpretable outside the originating trust framework.
 
-## Privacy
+The `acr` and `amr` members are complementary, not alternatives: `acr` is the OP's statement of the assurance achieved, and `amr` describes the methods used to achieve it. When both are present, `acr` governs. A relying party MUST NOT use `amr` values to raise or lower the assurance it attributes to the `acr` value, and SHOULD NOT base an assurance decision solely on `amr` values when `acr` is absent. An apparent inconsistency between the two, for example an `acr` value denoting a high assurance level together with `amr` values denoting a single weak factor, is a matter between the OP and the trust framework that governs it, and is not resolved by the relying party.
+
+## Privacy {#privacy}
 
 An OACI object reveals the identity of the OP that authenticated the subject, the time of authentication and, through `claim_mappings`, which identity attributes in the certificate were asserted by that OP. Together with the certificate serial number and `jti`, this allows a certificate to be correlated with an authentication event logged at the OP and the CA. CAs SHOULD include only members needed by the intended relying parties, and deployment profiles SHOULD consider whether `jti` and `auth_time` are required.
 
-This document intentionally does not define a member for the `sub` claim or any other End-User identifier. The claim values that were placed in the certificate are present in the certificate subject name; repeating them, or adding further identifiers, would increase the personal data carried by the certificate without adding information a relying party can verify.
+The `sub` member is a persistent identifier of the End-User at the OpenID Provider. When the OpenID Provider issues pairwise Subject Identifiers (see Section 8 of {{OIDC.Core}}), the value is specific to the `client_id` and cannot be used to correlate the End-User across Relying Parties. When the OpenID Provider issues public Subject Identifiers, the value is the same for every Relying Party of that OpenID Provider, and including it in a certificate allows anyone holding the certificate to correlate its subject with the End-User's accounts at other Relying Parties of the same OpenID Provider. A CA SHOULD include `sub` only where the ability to locate the authentication record is needed by the intended relying parties, and deployment profiles SHOULD state whether `sub` is included and under which Subject Identifier type.
+
+Beyond `sub`, this document defines no member carrying End-User claim values. The claim values that were placed in the certificate are present in the certificate subject name; repeating them would increase the personal data carried by the certificate without adding information a relying party can verify.
 
 ## Ignoring Unsupported Context Types
 
@@ -338,18 +342,18 @@ Index value:
 
 # Examples
 
-## Example OACI Object
+## Example OACI Object {#example-oaci}
 
 The following OACI object records an authentication performed by the OpenID Provider `https://op.example.com` at a context class defined by an example trust framework. The certificate subject name contains the End-User's given name (object identifier (OID) 2.5.4.42), surname (OID 2.5.4.4) and serial number (OID 2.5.4.5), and an email address in the Subject Alternative Name extension, all derived from ID Token claims.
 
 ~~~ json
 {
   "iss": "https://op.example.com",
-  "auth_time": "2026-10-19T13:04:05Z",
-  "acr": ["http://id.example.org/loa/3"],
+  "auth_time": 1792415045,
+  "acr": "http://id.example.org/loa/3",
   "amr": ["sc", "pin"],
   "jti": "0f3e2c6a-7b1d-4e4c-9a2e-5d1c2b3a4f60",
-  "client_id": "ca.example.com",
+  "client_id": "https://sign.example.com",
   "claim_mappings": [
     { "type": "rdn", "ref": "2.5.4.42", "claim": "/given_name" },
     { "type": "rdn", "ref": "2.5.4.4",  "claim": "/family_name" },
@@ -373,9 +377,7 @@ The `AuthenticationContext` carrying the above object has `contextType` set to `
 
 [[ This section is intended to be removed before publication as an RFC. ]]
 
-* `acr` is an array even when only one value is present, so that consumers implement one code path.
-
-* Member names follow the ID Token claim names where that aids recognition (`iss`, `acr`, `amr`, `jti`, `auth_time`) but the structure is not a JWT claims set and is not intended to be processed as one; `auth_time` in particular uses RFC 3339 text rather than NumericDate for readability in certificate viewers.
+* Member names and value formats follow the ID Token claims where there is a direct correspondence (`iss`, `auth_time`, `acr`, `amr`, `jti`), so that a CA copies values without conversion, but the structure is not a JWT claims set and is not intended to be processed as one.
 
 * Claim values are not repeated in `claim_mappings`, unlike SACI, because they are already present in the certificate and repeating them has not proven useful in practice.
 
