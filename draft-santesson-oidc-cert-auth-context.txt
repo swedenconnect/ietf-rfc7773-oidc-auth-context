@@ -5,8 +5,8 @@
 Network Working Group                                       S. Santesson
 Internet-Draft                                              M. Lindstrom
 Updates: 7773 (if approved)                              IDsec Solutions
-Intended status: Standards Track                         20 October 2026
-Expires: 23 April 2027
+Intended status: Standards Track                         22 October 2026
+Expires: 25 April 2027
 
 
        Certificate Authentication Context Type for OpenID Connect
@@ -60,7 +60,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2027.
+   This Internet-Draft will expire on 25 April 2027.
 
 Copyright Notice
 
@@ -104,7 +104,9 @@ Table of Contents
      7.2.  Informative References
    Appendix A.  Examples
      A.1.  Example OACI Object
-     A.2.  Example Extension
+     A.2.  Example Certificates
+       A.2.1.  Certificate with the Members in Common Use
+       A.2.2.  Certificate with All Members and Additional Members
    Design Notes
    Acknowledgments
    Authors' Addresses
@@ -674,30 +676,34 @@ Appendix A.  Examples
 A.1.  Example OACI Object
 
    The following OACI object records an authentication performed by the
-   OpenID Provider https://op.example.com at a context class defined by
-   an example trust framework.  The certificate subject name contains
-   the End-User's given name (object identifier (OID) 2.5.4.42), surname
-   (OID 2.5.4.4) and serial number (OID 2.5.4.5), and an email address
-   in the Subject Alternative Name extension, all derived from ID Token
-   claims.
+   OpenID Provider https://op.example.com on 2026-10-19 at 13:04:05 UTC,
+   satisfying the authentication context class https://example.com/loa/3
+   of an example trust framework.  The Signature Service
+   https://sign.example.com acted as Relying Party.  The certificate
+   subject name contains the End-User's personal identity number
+   (serialNumber, OID 2.5.4.5), given name (OID 2.5.4.42), surname (OID
+   2.5.4.4) and full name (commonName, OID 2.5.4.3), all derived from ID
+   Token claims, and an email address in the Subject Alternative Name
+   extension derived from the UserInfo Response.
 
    {
      "iss": "https://op.example.com",
      "auth_time": 1792415045,
-     "acr": "http://id.example.org/loa/3",
-     "amr": ["sc", "pin"],
+     "acr": "https://example.com/loa/3",
      "jti": "0f3e2c6a-7b1d-4e4c-9a2e-5d1c2b3a4f60",
      "client_id": "https://sign.example.com",
      "claim_mappings": [
+       { "type": "rdn", "ref": "2.5.4.5",
+         "claim": "/https:~1~1example.com~1claims~1personal_id" },
        { "type": "rdn", "ref": "2.5.4.42", "claim": "/given_name" },
        { "type": "rdn", "ref": "2.5.4.4",  "claim": "/family_name" },
-       { "type": "rdn", "ref": "2.5.4.5",
-         "claim": "/https:~1~1id.example.org~1claims~1personal_identity_number" },
-       { "type": "san", "ref": "1",        "claim": "/email" }
+       { "type": "rdn", "ref": "2.5.4.3",  "claim": "/name" },
+       { "type": "san", "ref": "1",        "claim": "/email",
+         "source": "userinfo" }
      ]
    }
 
-   Note that the third mapping refers to a claim whose name is itself a
+   Note that the first mapping refers to a claim whose name is itself a
    URI.  Since / is the reference token separator in a JSON Pointer, the
    / characters inside the claim name are escaped as ~1 (see Section 3
    of [RFC6901]).
@@ -708,13 +714,126 @@ A.1.  Example OACI Object
    JSON Pointer relative to the claim) for members of structured claims.
    ]]
 
-A.2.  Example Extension
+A.2.  Example Certificates
 
-   The AuthenticationContext carrying the above object has contextType
-   set to urn:ietf:params:x509-auth-context:oidc and contextInfo set to
-   the compact serialization of the object.  A Distinguished Encoding
-   Rules (DER) rendering of the complete extension will be added in a
-   future revision.
+   The two certificates below were issued with an Authentication Context
+   extension carrying OpenID Connect Authentication Context Information
+   (OACI).  They differ only in the content of that extension, which in
+   both cases is non-critical and holds a single AuthenticationContext
+   entry with contextType urn:ietf:params:x509-auth-context:oidc and, as
+   contextInfo, the compact serialization of the OACI object shown.
+
+A.2.1.  Certificate with the Members in Common Use
+
+   The OACI object of this certificate uses the members that are
+   expected to be present in most deployments.
+
+   {
+     "iss": "https://op.example.com",
+     "auth_time": 1792415045,
+     "acr": "https://example.com/loa/3",
+     "jti": "0f3e2c6a-7b1d-4e4c-9a2e-5d1c2b3a4f60",
+     "client_id": "https://sign.example.com",
+     "claim_mappings": [
+       { "type": "rdn", "ref": "2.5.4.5",
+         "claim": "/https:~1~1example.com~1claims~1personal_id" },
+       { "type": "rdn", "ref": "2.5.4.42", "claim": "/given_name" },
+       { "type": "rdn", "ref": "2.5.4.4",  "claim": "/family_name" },
+       { "type": "rdn", "ref": "2.5.4.3",  "claim": "/name" },
+       { "type": "san", "ref": "1",        "claim": "/email",
+         "source": "userinfo" }
+     ]
+   }
+
+   -----BEGIN CERTIFICATE-----
+   MIIEojCCBEigAwIBAgIQaRxBgrAzhqBLxgMNLE2zYDAKBggqhkjOPQQDAjA8MQsw
+   CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxFzAVBgNVBAMMDkV4YW1w
+   bGUgT3JnIENBMB4XDTI2MTAyMTIzMDIyNVoXDTI3MTAyMTIzMDI0MFowajELMAkG
+   A1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRUwEwYDVQQFEwwxOTgwMDEw
+   MTEyMzQxDTALBgNVBCoMBEpvaG4xDDAKBgNVBAQMA0RvZTERMA8GA1UEAwwISm9o
+   biBEb2UwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQTl0XWg1uw3OslF5AfJpKG
+   8TARrdlKG2K1UfxBsA/OzRlVwUjRy18XfIygQH5lOY1blWv6OtoXCjy2/OFDHQW+
+   o4IC/DCCAvgwKwYDVR0jBCQwIoAg6PyStPn2O6tUxxpIlfXhU1PJcAxJsaxJ0gD7
+   /gkPlBowKQYDVR0OBCIEIEClxJat0Be942HTTEcbjIAAlNDpH0SSYJMYYBMH4/OR
+   MA4GA1UdDwEB/wQEAwIGQDA6BgNVHR8EMzAxMC+gLaArhilodHRwOi8vZXhhbXBs
+   ZS5jb20vY3JsL2V4YW1wbGUtb3JnLWNhLmNybDCCAi8GByqFcIFJBQEEggIiMIIC
+   HjCCAhoMJnVybjppZXRmOnBhcmFtczp4NTA5LWF1dGgtY29udGV4dDpvaWRjDIIB
+   7nsiaXNzIjoiaHR0cHM6Ly9vcC5leGFtcGxlLmNvbSIsImF1dGhfdGltZSI6MTc5
+   MjQxNTA0NSwiYWNyIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9sb2EvMyIsImp0aSI6
+   IjBmM2UyYzZhLTdiMWQtNGU0Yy05YTJlLTVkMWMyYjNhNGY2MCIsImNsaWVudF9p
+   ZCI6Imh0dHBzOi8vc2lnbi5leGFtcGxlLmNvbSIsImNsYWltX21hcHBpbmdzIjpb
+   eyJ0eXBlIjoicmRuIiwicmVmIjoiMi41LjQuNSIsImNsYWltIjoiL2h0dHBzOn4x
+   fjFleGFtcGxlLmNvbX4xY2xhaW1zfjFwZXJzb25hbF9pZCJ9LHsidHlwZSI6InJk
+   biIsInJlZiI6IjIuNS40LjQyIiwiY2xhaW0iOiIvZ2l2ZW5fbmFtZSJ9LHsidHlw
+   ZSI6InJkbiIsInJlZiI6IjIuNS40LjQiLCJjbGFpbSI6Ii9mYW1pbHlfbmFtZSJ9
+   LHsidHlwZSI6InJkbiIsInJlZiI6IjIuNS40LjMiLCJjbGFpbSI6Ii9uYW1lIn0s
+   eyJ0eXBlIjoic2FuIiwicmVmIjoiMSIsImNsYWltIjoiL2VtYWlsIiwic291cmNl
+   IjoidXNlcmluZm8ifV19MB8GA1UdEQQYMBaBFGpvaG4uZG9lQGV4YW1wbGUuY29t
+   MAoGCCqGSM49BAMCA0gAMEUCICU+oZK3P988RzZAG1ndwJH1wa7WDLkdFn97SkOs
+   Eb3BAiEA7H2AAwKNCpZkxa4eQYCKIONWquPaeX8VYoMC4sCiGLg=
+   -----END CERTIFICATE-----
+
+A.2.2.  Certificate with All Members and Additional Members
+
+   The OACI object of this certificate uses every member defined in this
+   document, including amr, sub and an explicit source on the first
+   claim mapping, together with two additional members defined by the
+   issuer, one with a string value and one with a boolean value.  The
+   additional members follow the members defined by this document.
+
+   {
+     "iss": "https://op.example.com",
+     "auth_time": 1792415045,
+     "acr": "https://example.com/loa/3",
+     "amr": ["sc", "pin"],
+     "jti": "0f3e2c6a-7b1d-4e4c-9a2e-5d1c2b3a4f60",
+     "sub": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+     "client_id": "https://sign.example.com",
+     "claim_mappings": [
+       { "type": "rdn", "ref": "2.5.4.5",
+         "claim": "/https:~1~1example.com~1claims~1personal_id",
+         "source": "id_token" },
+       { "type": "rdn", "ref": "2.5.4.42", "claim": "/given_name" },
+       { "type": "rdn", "ref": "2.5.4.4",  "claim": "/family_name" },
+       { "type": "rdn", "ref": "2.5.4.3",  "claim": "/name" },
+       { "type": "san", "ref": "1",        "claim": "/email",
+         "source": "userinfo" }
+     ],
+     "https://example.com/claims/transaction_id": "dc6ac7656H89bfb51",
+     "https://example.com/claims/sign_message_displayed": true
+   }
+
+   -----BEGIN CERTIFICATE-----
+   MIIFbDCCBRKgAwIBAgIRAI7QprHdV9BqCt2MTUNg3NgwCgYIKoZIzj0EAwIwPDEL
+   MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRcwFQYDVQQDDA5FeGFt
+   cGxlIE9yZyBDQTAeFw0yNjEwMjEyMzAyMjVaFw0yNzEwMjEyMzAyNDBaMGoxCzAJ
+   BgNVBAYTAlNFMRQwEgYDVQQKDAtFeGFtcGxlIE9yZzEVMBMGA1UEBRMMMTk4MDAx
+   MDExMjM0MQ0wCwYDVQQqDARKb2huMQwwCgYDVQQEDANEb2UxETAPBgNVBAMMCEpv
+   aG4gRG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEE5dF1oNbsNzrJReQHyaS
+   hvEwEa3ZShtitVH8QbAPzs0ZVcFI0ctfF3yMoEB+ZTmNW5Vr+jraFwo8tvzhQx0F
+   vqOCA8UwggPBMCsGA1UdIwQkMCKAIOj8krT59jurVMcaSJX14VNTyXAMSbGsSdIA
+   +/4JD5QaMCkGA1UdDgQiBCBApcSWrdAXveNh00xHG4yAAJTQ6R9EkmCTGGATB+Pz
+   kTAOBgNVHQ8BAf8EBAMCBkAwOgYDVR0fBDMwMTAvoC2gK4YpaHR0cDovL2V4YW1w
+   bGUuY29tL2NybC9leGFtcGxlLW9yZy1jYS5jcmwwggL4BgcqhXCBSQUBBIIC6zCC
+   AucwggLjDCZ1cm46aWV0ZjpwYXJhbXM6eDUwOS1hdXRoLWNvbnRleHQ6b2lkYwyC
+   Ard7ImlzcyI6Imh0dHBzOi8vb3AuZXhhbXBsZS5jb20iLCJhdXRoX3RpbWUiOjE3
+   OTI0MTUwNDUsImFjciI6Imh0dHBzOi8vZXhhbXBsZS5jb20vbG9hLzMiLCJhbXIi
+   Olsic2MiLCJwaW4iXSwianRpIjoiMGYzZTJjNmEtN2IxZC00ZTRjLTlhMmUtNWQx
+   YzJiM2E0ZjYwIiwic3ViIjoiYTFiMmMzZDRlNWY2MDcxODI5M2E0YjVjNmQ3ZThm
+   OTAiLCJjbGllbnRfaWQiOiJodHRwczovL3NpZ24uZXhhbXBsZS5jb20iLCJjbGFp
+   bV9tYXBwaW5ncyI6W3sidHlwZSI6InJkbiIsInJlZiI6IjIuNS40LjUiLCJjbGFp
+   bSI6Ii9odHRwczp+MX4xZXhhbXBsZS5jb21+MWNsYWltc34xcGVyc29uYWxfaWQi
+   LCJzb3VyY2UiOiJpZF90b2tlbiJ9LHsidHlwZSI6InJkbiIsInJlZiI6IjIuNS40
+   LjQyIiwiY2xhaW0iOiIvZ2l2ZW5fbmFtZSJ9LHsidHlwZSI6InJkbiIsInJlZiI6
+   IjIuNS40LjQiLCJjbGFpbSI6Ii9mYW1pbHlfbmFtZSJ9LHsidHlwZSI6InJkbiIs
+   InJlZiI6IjIuNS40LjMiLCJjbGFpbSI6Ii9uYW1lIn0seyJ0eXBlIjoic2FuIiwi
+   cmVmIjoiMSIsImNsYWltIjoiL2VtYWlsIiwic291cmNlIjoidXNlcmluZm8ifV0s
+   Imh0dHBzOi8vZXhhbXBsZS5jb20vY2xhaW1zL3RyYW5zYWN0aW9uX2lkIjoiZGM2
+   YWM3NjU2SDg5YmZiNTEiLCJodHRwczovL2V4YW1wbGUuY29tL2NsYWltcy9zaWdu
+   X21lc3NhZ2VfZGlzcGxheWVkIjp0cnVlfTAfBgNVHREEGDAWgRRqb2huLmRvZUBl
+   eGFtcGxlLmNvbTAKBggqhkjOPQQDAgNIADBFAiB59kR6EPWkPpYpyy6GAPEtJvgG
+   u00bt8UOjQhW8ML5vgIhAITosH6WM5AgDr6dhvVqvVqZXQ07sDbX4V8/WQK8c0Q8
+   -----END CERTIFICATE-----
 
 Design Notes
 
